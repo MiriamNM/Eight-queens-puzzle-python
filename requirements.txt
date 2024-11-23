@@ -6,3 +6,4 @@ uuid7==0.1.0
 fastapi==0.95.0
 sqlalchemy==1.4.48
 pytest==7.4.0
+commitizen===3.31.0
