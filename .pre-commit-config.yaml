@@ -1,0 +1,32 @@
+repos:
+  # Commitizen para validar mensajes de commit
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.16.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  # Pre-commit hooks adicionales
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      # Black para formateo automático de código Python
+      - id: black
+        language-version: python3.11
+        args: [--line-length, '88']
+
+      # Validar YAML para errores de formato
+      - id: check-yaml
+
+      # Detectar archivos con espacios finales en blanco
+      - id: trailing-whitespace
+
+      # Verificar archivos que tienen un fin de línea vacío
+      - id: end-of-file-fixer
+
+  # Flake8 para análisis estático de código Python
+  - repo: https://github.com/pycqa/flake8
+    rev: v6.1.0
+    hooks:
+      - id: flake8
+        args: [--max-line-length=88]

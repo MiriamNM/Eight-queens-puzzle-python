@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.idea
 # C extensions
 *.so
 
@@ -15,6 +16,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+libs/
 lib64/
 parts/
 sdist/
@@ -57,6 +59,9 @@ cover/
 
 # Django stuff:
 *.log
+*.pot
+*.pyc
+*.swp
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -160,3 +165,27 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Carpeta de configuración de visual estudio code
+.vscode/
+
+# Carpeta de configuración de IntelliJ IDEA
+.idea/
+
+# Carpeta de cache de visual estudio code
+.vscode-server/
+
+# Carpeta de cache de python
+.python/
+
+# Carpeta de archivos temporales
+*.bak
+*.tmp
+
+# Otros archivos y carpetas que deseas excluir
+.DS_Store
+.pytest_cache/
+.coverage
+htmlcov/
+
+src/infrastructure/session_manager.py

@@ -1,0 +1,9 @@
+pendulum==3.0.0
+psycopg2-binary==2.9.9
+python-dateutil==2.8.2
+result==0.16.1
+uuid7==0.1.0
+fastapi==0.95.0
+sqlalchemy==1.4.48
+pytest==7.4.0
+commitizen===3.31.0
