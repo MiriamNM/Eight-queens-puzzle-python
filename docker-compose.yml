@@ -2,23 +2,33 @@ version: "3"
 
 services:
   app:
+    image: python:3.11
     build: .
     container_name: eight_queens
     ports:
-      - "5000:5000"
-    environment:
-      - DATABASE_URL=postgresql://queens:queens12345/eight_queens
+      - "8080:8080"
     depends_on:
       - db
     networks:
-      - .:/app
+      - app-network
+    environment:
+      DATABASE_URL: "postgresql://mirichi:mirichi@eight_queens_db:5432/eight_queens_db"
 
   db:
     image: postgres:13
     container_name: eight_queens_db
     environment:
-      POSTGRES_USER: queens
-      POSTGRES_PASSWORD: queens12345
-      POSTGRES_DB: eight_queens
+      POSTGRES_USER: mirichi
+      POSTGRES_PASSWORD: mirichi
+      POSTGRES_DB: eight_queens_db
     ports:
-      - "5432-5432"
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db:
