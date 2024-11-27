@@ -2,16 +2,31 @@ version: "3"
 
 services:
   app:
-    image: python:3.11
-    container_name: eight_queens
+    build:
+      context: .
+    container_name: eight_queens_app
     ports:
-      - "8081:8080"
+      - "8080:8080"
     depends_on:
       - db
+      - flyway
     networks:
       - app-network
     environment:
-      DATABASE_URL: postgresql://mirichi:mirichi@db:5432/eight_queens_db
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command:
+      [
+        "uvicorn",
+        "src.app:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8080",
+        "--reload",
+      ]
 
   db:
     image: postgres:13
@@ -30,12 +45,12 @@ services:
   flyway:
     image: flyway/flyway:9.9
     environment:
-      FLYWAY_URL: postgresql://mirichi:mirichi@db:5432/eight_queens_db
+      FLYWAY_URL: ${DATABASE_URL}
       FLYWAY_USER: ${POSTGRES_USER}
       FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./db/migrations:/flyway/sql
-    command: ["migrate"]
+    command: ["flyway", "migrate"]
 
 networks:
   app-network:

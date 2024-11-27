@@ -1,5 +1,10 @@
 -- V1__initial_schema.sql
-CREATE TABLE example (
+CREATE TABLE queens (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    num_queens INT NOT NULL,
+    solutions JSONB NOT NULL,
+    created_by VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(100),
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
