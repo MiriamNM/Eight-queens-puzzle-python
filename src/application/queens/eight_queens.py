@@ -14,9 +14,9 @@ def queens_create(data, context):
         session = next(get_db_session())
 
         repository = EightQueensRepository(session)
-        solution = repository.solve_n_queens(n, email, Queens)
+        queens = repository.solve_n_queens(n, email, Queens)
 
-        result = Ok(solution)
+        result = Ok(queens)
 
         response = result.json()
 

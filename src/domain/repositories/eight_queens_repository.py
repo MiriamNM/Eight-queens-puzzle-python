@@ -1,7 +1,5 @@
 from typing import List
-import pendulum
 import uuid_extensions.uuid7 as uuid7
-from domain.constants import TZ
 
 from domain.entities.queens.eight_queens import Queens
 
@@ -15,12 +13,13 @@ class EightQueensRepository:
         if n == 1 or n >= 4:
             self.recursive_function(results, [], n, 0)
 
+        flat_results = ["".join(row) for row in results]
+
         queens_instance = Queens(
             id=uuid7(),
             number_queens=n,
-            solutions=results,
+            solutions=flat_results,
             created_by=email,
-            created_at=pendulum.now("America/Mexico_City"),
         )
 
         self.session.add(queens_instance)
@@ -28,11 +27,6 @@ class EightQueensRepository:
         return queens_instance
 
     def is_valid_position(self, result_arr: List[List[int]], position: List[int]) -> bool:
-        """
-        Verifica si es seguro colocar una reina en la posición actual.
-        - No debe haber otra reina en la misma fila o columna.
-        - No debe haber otra reina en la misma diagonal.
-        """
         for queen in result_arr:
             if queen[0] == position[0] or queen[1] == position[1]:
                 return False
@@ -41,9 +35,6 @@ class EightQueensRepository:
         return True
 
     def build_board(self, arr: List[List[int]], n: int) -> List[str]:
-        """
-        Construye una representación visual del tablero con las reinas.
-        """
         board = []
         for i in range(n):
             row = ""
@@ -53,9 +44,6 @@ class EightQueensRepository:
         return board
 
     def recursive_function(self, result_arr: List[List[int]], current_arr: List[List[int]], n: int, row: int):
-        """
-        Función recursiva que coloca las reinas fila por fila.
-        """
         if row == n:  # Si todas las reinas están colocadas
             result_arr.append(self.build_board(current_arr, n))
             return

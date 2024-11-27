@@ -38,3 +38,11 @@ status:
 
 logs:
 	docker compose logs -f
+
+migrate:
+	@echo "Migrando esquema: $(SCHEMA)"
+	docker-compose run --rm flyway migrate -schemas=$(SCHEMA) -locations=filesystem:/flyway/sql/$(SCHEMA)/migrations
+
+undo:
+	@echo "Migrando esquema: $(SCHEMA)"
+	docker-compose run --rm flyway undo -schemas=$(SCHEMA) -locations=filesystem:/flyway/sql/$(SCHEMA)/migrations

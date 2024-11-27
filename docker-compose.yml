@@ -48,8 +48,11 @@ services:
       FLYWAY_URL: ${DATABASE_URL}
       FLYWAY_USER: ${POSTGRES_USER}
       FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
+      FLYWAY_SCHEMAS: public
     volumes:
       - ./db/migrations:/flyway/sql
+    depends_on:
+      - db
     command: ["flyway", "migrate"]
 
 networks:
