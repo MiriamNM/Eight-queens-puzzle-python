@@ -1,9 +1,6 @@
 import logging
 from pydantic import BaseModel
-from infrastructure.flyway_manager import run_flyway_migrations, check_flyway_status
-
-from result import Err
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from application.business import business_logic
 
@@ -14,11 +11,6 @@ app = FastAPI()
 class RequestModel(BaseModel):
     n: int
     context: dict
-
-
-@app.get("/version")
-async def get_version():
-    return {"version": "1.0.0"}
 
 
 @app.get("/")
@@ -32,28 +24,25 @@ def solve(request: RequestModel):
         n = request.n
         context = request.context
 
-        if not isinstance(context, dict):
-            logger.error("Invalid context value.")
-            return Err("Invalid context value.")
+        if n < 1:
+            raise HTTPException(status_code=400, detail="`n` must be greater than 0.")
 
-        return business_logic({"n": n}, context)
+        logger.info(f"Processing request for n={n}")
+
+        result = business_logic({"n": n}, context)
+
+        return {"success": True, "result": result}
+    except HTTPException as e:
+        logger.error(f"HTTP error: {e.detail}")
+        raise
     except Exception as e:
-        return Err(str(e))
+        logger.exception("Unexpected error occurred.")
+        raise HTTPException(status_code=500, detail="An unexpected error occurred.")
 
 
 @app.exception_handler(404)
-async def not_found_handler(request, exc):
+async def not_found_handler(request: Request, exc):
     return JSONResponse(
         status_code=404,
         content={"message": "Endpoint not found"},
     )
-
-def main():
-    # Verificar el estado de las migraciones
-    check_flyway_status()
-
-    # Ejecutar las migraciones
-    run_flyway_migrations()
-
-if __name__ == "__main__":
-    main()
