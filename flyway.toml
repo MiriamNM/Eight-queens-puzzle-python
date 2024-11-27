@@ -1,0 +1,4 @@
+[flyway]
+url="jdbc:postgresql://db:5432/eight_queens_db"
+locations=["/flyway/sql"]
+baselineOnMigrate=true

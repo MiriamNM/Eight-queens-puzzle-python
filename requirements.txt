@@ -36,3 +36,5 @@ tzdata==2024.2
 uuid7==0.1.0
 uvicorn==0.32.1
 wcwidth==0.2.13
+python-dotenv
+pytz
