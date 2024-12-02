@@ -2,7 +2,14 @@
 
 # Eight Queens Puzzle API
 
-Este proyecto implementa el problema de las 8 reinas usando FastAPI, siguiendo la arquitectura hexagonal.
+[The eight queens puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle) Este proyecto implementa el problema de las 8 reinas usando FastAPI, siguiendo la arquitectura hexagonal. 
+
+## Retos
+Construir desde 0 la aquitectura con python, en especial ha sido complicado hacer las migraciones con flyway.
+
+## Next steps
+- Terminar el backend haciendo las migraciones con flyway.
+- Construir el frontend.
 
 ## Requisitos
 
