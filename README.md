@@ -62,7 +62,7 @@ hight-queens-puzzle-python
 
 ```
 
-### Descripción de la estructura
+### DDescription of the structure
 
 - Dockerfile: file with the configuration to create the image of the worker service
 - Makefile: file to facilitate the compilation of the containers
@@ -85,48 +85,48 @@ hight-queens-puzzle-python
 
 
 
-### comandos para: crear y activar entorno de python y instalar dependencias
+### Commands to: create and activate python environment and install dependencies
 
    ```bash
-   # crear entorno de python
+   # create python environment
    make create-venv
 
-   # activar entorno de python
+   # activate python environment
    source venv/bin/activate
 
-   # desactivar entorno de python
+   # disable python environment
    deactivate
 
-   # instalar dependencias
+   # install dependencies
    make install
    ```
 
-9. Comandos de Makefile para: compilar, iniciar, parar, reiniciar, status, reconstruir, logs, y bash
+9. Makefile commands for: build, start, stop, restart, status, rebuild, logs, and bash
 
    ```bash
-   # compila la imagen
+   # compile the image
    make build
 
-   # levanta el contenedor
+   # llift the container
    make start
 
-   # detiene el contenedor
+   # stops the container
    make stop
 
-   # reinicia el contenedor
+   # restart the container
    make restart
 
-   # muestra el status del contenedor
+   # shows the status of the container
    make status
 
-   # detiene, compila y levanta el contenedor del worker
+   # stops, builds and starts the worker container
    make rebuild
 
-   # muestra los logs del contenedor
+   # mshow container logs
    make logs
 
    ```
-10. Plataformas para realizar request http
+10. Platforms to make http requests
    - Insomnia
    - Postman
    - curl
