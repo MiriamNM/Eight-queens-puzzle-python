@@ -2,70 +2,86 @@
 
 # Eight Queens Puzzle API
 
-[The eight queens puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle) Este proyecto implementa el problema de las 8 reinas usando FastAPI, siguiendo la arquitectura hexagonal. 
+[The eight queens puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle) The eight queens puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other; thus, a solution requires that no two queens share the same row, column, or diagonal. There are 92 solutions. The problem was first posed in the mid-19th century. In the modern era, it is often used as an example problem for various computer programming techniques.arquitectura hexagonal. 
 
-## Retos
-Construir desde 0 la aquitectura con python, en especial ha sido complicado hacer las migraciones con flyway.
+## Challenges
+- Develop the 8 queens algorithm in python.
+- Use FastApi to build the api.
+- Use ORM as flyway and make migrations.
+Store the solutions in postgres
 
 ## Next steps
-- Terminar el backend haciendo las migraciones con flyway.
-- Construir el frontend.
+- Finish the backend where Flyway already works well.
+- Implement the frontend.
 
-## Requisitos
+## Requirements
 
 - Docker y Docker Compose
-- Make
+- python
+- venv
+- postman 
+- visual studio code
 
 ## Comandos
 
-- Construir: `make build`
-- Levantar servicios: `make up`
-- Ejecutar pruebas: `make test`
+- Build: `make build`
+- Rebuild: `make rebuild`
+- Raise services: `make up`
+- Run tests: `make test`
 
 ## Estructura
 
 ```bash
-Eight-queens-puzzle-python
+hight-queens-puzzle-python
+├── .cz.toml
+├── .pre-commit-config.yaml
 ├── Dockerfile
 ├── Makefile
 ├── README.md
 ├── docker-compose.yml
+├── flyway.conf
 ├── pytest.ini
 ├── requirements.txt
 ├── src
 │   ├── app.py
 │   ├── application
-│   │   └── business.py
+│   │   ├── business.py
+│   │   └── queens
+│   │       └── eight_queens.py
 │   ├── domain
 │   │   ├── entities
-│   │   │   └── example.py
+│   │   │   └── queens
+│   │   │       └── eight_queens.py
 │   │   └── repositories
-│   │       └── repository_example.py
+│   │       └── eight_queens_repository.py
 │   └── infrastructure
 │       └── entity_manager.py
 └── tests
     └── application
+
+
 ```
 
 ### Descripción de la estructura
 
-- Dockerfile: archivo con la configuración para crear la imagen del servicio del worker
-- Makefile: archivo para facilitar la compilación de los contenedores
-- docker-compose.yml: archivo con la configuración para levantar el servicio del worker
-- src: carpeta para almacenar el código del servicio
-- app.py: archivo inicial para ejecutar el servicio 
-- application: carpeta para almacenar la lógica del servicio
-   - business.py: archivo con la lógica del servicio contiene la función
-- domain: carpeta para almacenar las clases de datos, entidades, repositorios, etc
-   - entities: carpeta para almacenar las clases de datos
-      - example.py: archivo con la clase de datos de ejemplo
-   - repositories: carpeta para almacenar las clases de repositorios
-      - repository_example.py: archivo con la clase de repositorio de ejemplo
-- infrastructure: carpeta para almacenar la lógica para conectarse a servicios externos como bases de datos, correo, cache, etc
-   - entity_manager.py: archivo con la lógica para conectarse a la base de datos
-- tests: carpeta para almacenar las pruebas unitarias
-   - application: carpeta para almacenar las pruebas unitarias de la lógica del servicio
-      - test_business.py: archivo con las pruebas unitarias de la lógica del servicio
+- Dockerfile: file with the configuration to create the image of the worker service
+- Makefile: file to facilitate the compilation of the containers
+- docker-compose.yml: file with the configuration to start the worker service
+- src: folder to store the service code
+- app.py: initial file to run the service
+- application: folder to store the service logic
+- eight_queens.py: File with the service logic contains the queen algorithm.
+- business.py: file with the service logic contains the function
+- domain: folder to store the data classes, entities, repositories, etc.
+- entities: folder to store the data classes
+- eight_queens.py: file with the queens data class
+- repositories: folder to store the repository classes
+- eight_queens_repository.py: file with the queens repository class
+- infrastructure: folder to store the logic to connect to external services such as databases, mail, cache, etc.
+- entity_manager.py: file with the logic to connect to the database
+- tests: folder to store the unit tests
+- application: folder to store the tests service logic unit tests
+- test_business.py: file with service logic unit tests
 
 
 
@@ -83,21 +99,6 @@ Eight-queens-puzzle-python
 
    # instalar dependencias
    make install
-   ```
-8. Ejecutar pruebas unitarias, cobertura de código y reporte de cobertura
-
-   ```bash
-   # ejecutar pruebas unitarias
-   make test
-
-   # ejecutar pruebas unitarias con cobertura de código
-   make coverage
-
-   # reporte de cobertura
-   make report
-
-   # reporte de cobertura en html
-   make report-html
    ```
 
 9. Comandos de Makefile para: compilar, iniciar, parar, reiniciar, status, reconstruir, logs, y bash
