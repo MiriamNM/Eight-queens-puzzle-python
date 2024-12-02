@@ -40,9 +40,9 @@ logs:
 	docker compose logs -f
 
 migrate:
-	@echo "Migrando esquema: $(SCHEMA)"
-	docker-compose run --rm flyway migrate -schemas=$(SCHEMA) -locations=filesystem:/flyway/sql/$(SCHEMA)/migrations
+	@echo "Migrando esquema: public"
+	docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
 
 undo:
-	@echo "Migrando esquema: $(SCHEMA)"
-	docker-compose run --rm flyway undo -schemas=$(SCHEMA) -locations=filesystem:/flyway/sql/$(SCHEMA)/migrations
+	@echo "Deshaciendo migración en esquema: public"
+	docker-compose run --rm flyway undo -schemas=public -locations=filesystem:/flyway/sql/migrations
