@@ -61,25 +61,6 @@ Eight-queens-puzzle-python
       - test_business.py: archivo con las pruebas unitarias de la lógica del servicio
 
 
-### Archivo launch.json de vscode de ejemplo para configurar variables de entorno
-   ``` json
-      {
-      "version": "0.2.0",
-      "configurations": [
-         {
-               "name": "Python: archivo actual",
-               "type": "python",
-               "request": "launch",
-               "program": "${file}",
-               "console": "integratedTerminal",
-               "justMyCode": true,
-               "env": {
-               }
-            }
-         ]
-      }
-   ```
-
 
 ### comandos para: crear y activar entorno de python y instalar dependencias
 

@@ -18,14 +18,15 @@ def read_root():
     return {"message": "Welcome to the Eight Queens Puzzle API"}
 
 
-@app.post("/queens")
+@app.post("/queens/")
 def solve(request: RequestModel):
     try:
         n = request.n
         context = request.context
 
         if n < 1:
-            raise HTTPException(status_code=400, detail="`n` must be greater than 0.")
+            raise HTTPException(
+                status_code=400, detail="`n` must be greater than 0.")
 
         logger.info(f"Processing request for n={n}")
 
@@ -37,7 +38,8 @@ def solve(request: RequestModel):
         raise
     except Exception as e:
         logger.exception("Unexpected error occurred.")
-        raise HTTPException(status_code=500, detail="An unexpected error occurred.")
+        raise HTTPException(
+            status_code=500, detail="An unexpected error occurred.")
 
 
 @app.exception_handler(404)

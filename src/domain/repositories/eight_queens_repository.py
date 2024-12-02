@@ -1,5 +1,5 @@
 from typing import List
-import uuid_extensions.uuid7 as uuid7
+from uuid import uuid4
 
 from domain.entities.queens.eight_queens import Queens
 
@@ -16,7 +16,7 @@ class EightQueensRepository:
         flat_results = ["".join(row) for row in results]
 
         queens_instance = Queens(
-            id=uuid7(),
+            id=uuid4(),
             number_queens=n,
             solutions=flat_results,
             created_by=email,
@@ -24,6 +24,7 @@ class EightQueensRepository:
 
         self.session.add(queens_instance)
         self.session.commit()
+        self.session.refresh(queens_instance)
         return queens_instance
 
     def is_valid_position(self, result_arr: List[List[int]], position: List[int]) -> bool:

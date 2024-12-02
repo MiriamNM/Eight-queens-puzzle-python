@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -23,5 +23,3 @@ EXPOSE 8080
 CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
 
 ENV PYTHONPATH=/app/src
-
-ENV TZ=America/Mexico_City
