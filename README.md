@@ -11,7 +11,7 @@
 Store the solutions in postgres
 
 ## Next steps
-- Finish the backend where Flyway already works well.
+- Return answers to solutions with pagination
 - Implement the frontend.
 
 ## Requirements
