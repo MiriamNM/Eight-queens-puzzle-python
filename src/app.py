@@ -53,12 +53,13 @@ def solve(request: RequestModel, db_session=Depends(get_db_session)):
 @app.get("/queens/")
 def get_queens(db_session=Depends(get_db_session)):
     try:
-        result = db_session.execute(text("SELECT * FROM queens")).fetchall()
+        query = "SELECT * FROM queens"
+        result = db_session.execute(text(query)).fetchall()
 
         if not result:
             return {"success": True, "result": [], "error": ""}
 
-        queens_list = [dict(row) for row in result]
+        queens_list = [dict(row._mapping) for row in result]
 
         return {"success": True, "result": queens_list, "error": ""}
     except Exception as e:
