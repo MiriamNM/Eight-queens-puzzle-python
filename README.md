@@ -132,7 +132,7 @@ hight-queens-puzzle-python
    - curl
 
 11. POST: http://localhost:8080/queens/
-![post]([https://raw.githubusercontent.com/MiriamNM/MiriamNM.github.io/main/assets/LogoGitHub.png](https://raw.githubusercontent.com/MiriamNM/Eight-queens-puzzle-python/refs/heads/main/public/assets/Captura%20de%20pantalla%202024-12-03%20a%20la(s)%2011.41.58%E2%80%AFp.m..png)
+![post](https://raw.githubusercontent.com/MiriamNM/Eight-queens-puzzle-python/refs/heads/main/public/assets/Captura%20de%20pantalla%202024-12-03%20a%20la(s)%2011.41.58%E2%80%AFp.m..png)
 
 12 GET: http://localhost:8080/queens/
 ![post](https://raw.githubusercontent.com/MiriamNM/Eight-queens-puzzle-python/refs/heads/main/public/assets/Captura%20de%20pantalla%202024-12-03%20a%20la(s)%2011.41.51%E2%80%AFp.m..png)
