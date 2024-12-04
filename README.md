@@ -125,6 +125,9 @@ hight-queens-puzzle-python
    # mshow container logs
    make logs
 
+   # Show database
+   make queens
+
    ```
 10. Platforms to make http requests
    - Insomnia

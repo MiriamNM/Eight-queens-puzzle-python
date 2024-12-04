@@ -39,6 +39,9 @@ status:
 logs:
 	docker compose logs -f
 
+queens: 
+	docker exec -it eight_queens_db psql -U mirichi -d eight_queens_db
+
 migrate:
 	@echo "Migrando esquema: public"
 	docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
