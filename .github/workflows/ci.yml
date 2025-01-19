@@ -23,7 +23,7 @@ jobs:
       with:
         version: latest
 
-    # Paso 3: Instalar dependencias de Docker y Docker Compose
+    # Paso 3: Instalar Docker y Docker Compose
     - name: Install Docker and Docker Compose
       run: |
         brew install --cask docker
@@ -34,6 +34,8 @@ jobs:
           echo "Esperando a que Docker esté listo..."
           sleep 5
         done
+        # Verificar que docker-compose esté instalado
+        docker-compose --version
 
     # Paso 4: Construir la imagen Docker
     - name: Build Docker image
