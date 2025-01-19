@@ -23,19 +23,19 @@ jobs:
       with:
         version: latest
 
-    # Paso 3: Instalar Docker y Docker Compose
-    - name: Install Docker and Docker Compose
+    # Paso 3: Instalar Docker y Docker Compose (si no está disponible)
+    - name: Install Docker Compose
       run: |
         brew install --cask docker
-        brew install docker-compose
+        brew install docker-compose || echo "docker-compose already installed"
         open /Applications/Docker.app
         # Esperar a que Docker esté listo
         while ! docker info >/dev/null 2>&1; do
           echo "Esperando a que Docker esté listo..."
           sleep 5
         done
-        # Verificar que docker-compose esté instalado
-        docker-compose --version
+        # Verificar que docker-compose o docker compose esté instalado
+        docker-compose --version || docker compose version
 
     # Paso 4: Construir la imagen Docker
     - name: Build Docker image
@@ -45,7 +45,7 @@ jobs:
     # Paso 5: Levantar los contenedores con Docker Compose
     - name: Run docker-compose
       run: |
-        docker-compose up -d
+        docker-compose up -d || docker compose up -d
       env:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -54,15 +54,15 @@ jobs:
     # Paso 6: Ejecutar migraciones
     - name: Run migrations
       run: |
-        docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
+        docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations || docker compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
 
     # Paso 7: Ejecutar pruebas
     - name: Run tests
       run: |
-        docker-compose exec app pytest --maxfail=1 --disable-warnings -v
+        docker-compose exec app pytest --maxfail=1 --disable-warnings -v || docker compose exec app pytest --maxfail=1 --disable-warnings -v
 
     # Paso 8: Detener los contenedores después de las pruebas
     - name: Shutdown Docker containers
       if: always()
       run: |
-        docker-compose down
+        docker-compose down || docker compose down
