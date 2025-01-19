@@ -31,6 +31,7 @@ services:
     build:
       context: .
     container_name: eight_queens_app
+    working_dir: /app
     restart: always
     depends_on:
       - db

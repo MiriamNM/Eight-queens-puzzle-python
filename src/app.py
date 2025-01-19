@@ -53,27 +53,18 @@ def solve(request: RequestModel, db_session=Depends(get_db_session)):
 @app.get("/queens/")
 def get_queens(db_session=Depends(get_db_session)):
     try:
-        query = "SELECT * FROM queens"
-        result = db_session.execute(text(query)).fetchall()
+        queens_list = db_session.query(Queens).all()
 
-        if not result:
+        if not queens_list:
             return {"success": True, "result": [], "error": ""}
 
-        queens_list = [dict(row._mapping) for row in result]
+        result = [queen.__dict__ for queen in queens_list]
 
-        return {"success": True, "result": queens_list, "error": ""}
-    except Exception as e:
-        logger.exception("Error al obtener las reinas desde la base de datos.")
-        raise HTTPException(
-            status_code=500, detail="Error al obtener los elementos de la tabla `queens`.")
+        for item in result:
+            item.pop('_sa_instance_state', None)
 
+        return {"success": True, "result": result, "error": ""}
 
-@app.get("/users/")
-def get_users(db=Depends(get_db_session)):
-    try:
-        result = db.query(queens_list).all()
-        queens_list = [dict(row) for row in result]
-        return result
     except Exception as e:
         logger.exception("Error al obtener las reinas desde la base de datos.")
         raise HTTPException(

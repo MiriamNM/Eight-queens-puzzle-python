@@ -189,3 +189,8 @@ cython_debug/
 htmlcov/
 
 src/infrastructure/session_manager.py
+
+get-pip.py
+backup.sql
+flyway.conf
+.cz.toml
