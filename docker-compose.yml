@@ -45,7 +45,6 @@ services:
         "--port",
         "8080",
         "--reload",
-        pytest --maxfail=1 --disable-warnings -v,
       ]
     ports:
       - "8080:8080"
