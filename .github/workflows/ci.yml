@@ -13,19 +13,12 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # Paso 1: Instalar Docker y Docker Compose
+    # Paso 1: Configurar Docker y Docker Compose
     - name: Set up Docker
-      run: |
-          brew install --cask docker
-          brew install docker-compose
-          open /Applications/Docker.app
-          # Intentar iniciar Docker si no está ejecutándose
-          sudo systemctl start docker
-          # Asegurarse de que Docker está corriendo
-          while ! docker info >/dev/null 2>&1; do
-            echo "Esperando a que Docker esté listo..."
-            sleep 5
-          done
+      uses: docker/setup-buildx-action@v2
+      with:
+        version: latest
+
     # Paso 2: Comprobar el repositorio
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -40,9 +33,9 @@ jobs:
       run: |
         docker-compose up -d
       env:
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }} 
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }} 
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} 
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     # Paso 5: Ejecutar pruebas
     - name: Run tests
