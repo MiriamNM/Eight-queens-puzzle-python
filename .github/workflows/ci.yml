@@ -19,7 +19,6 @@ jobs:
         brew install --cask docker
         brew install docker-compose
         open /Applications/Docker.app
-        done
 
     # Paso 2: Comprobar el repositorio
     - name: Checkout repository
@@ -45,4 +44,3 @@ jobs:
       if: always()
       run: |
         docker-compose down
-
