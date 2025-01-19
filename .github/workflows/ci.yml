@@ -16,20 +16,23 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Set up Docker
+    - name: Set up Docker and Docker Compose
       run: |
         brew install docker
         docker --version
-        docker compose version  # Verifica si Docker Compose está instalado y funcionando
+        # Install Docker Compose if it's not included with the Docker version
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+        docker-compose --version  # Verifica la instalación de Docker Compose
 
-    - name: Build and start containers using docker compose
+    - name: Build and start containers using docker-compose
       run: |
-        docker compose -f docker-compose.yml up --build -d
+        docker-compose -f docker-compose.yml up --build -d
 
     - name: Run tests with pytest
       run: |
-        docker compose exec app pytest --maxfail=1 --disable-warnings -v
+        docker-compose exec app pytest --maxfail=1 --disable-warnings -v
 
     - name: Shutdown containers
       run: |
-        docker compose down
+        docker-compose down
