@@ -13,22 +13,34 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # Paso 1: Configurar Docker y Docker Compose
+    # Paso 1: Comprobar el repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Paso 2: Configurar Docker
     - name: Set up Docker
       uses: docker/setup-buildx-action@v2
       with:
         version: latest
 
-    # Paso 2: Comprobar el repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    # Paso 3: Instalar dependencias de Docker y Docker Compose
+    - name: Install Docker and Docker Compose
+      run: |
+        brew install --cask docker
+        brew install docker-compose
+        open /Applications/Docker.app
+        # Esperar a que Docker esté listo
+        while ! docker info >/dev/null 2>&1; do
+          echo "Esperando a que Docker esté listo..."
+          sleep 5
+        done
 
-    # Paso 3: Construir la imagen Docker
+    # Paso 4: Construir la imagen Docker
     - name: Build Docker image
       run: |
-        docker build -t eight-queens-puzzle-python .
+        docker build -t eight-queens-puzzle .
 
-    # Paso 4: Levantar el contenedor usando docker-compose
+    # Paso 5: Levantar los contenedores con Docker Compose
     - name: Run docker-compose
       run: |
         docker-compose up -d
@@ -37,12 +49,17 @@ jobs:
         POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
-    # Paso 5: Ejecutar pruebas
+    # Paso 6: Ejecutar migraciones
+    - name: Run migrations
+      run: |
+        docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
+
+    # Paso 7: Ejecutar pruebas
     - name: Run tests
       run: |
         docker-compose exec app pytest --maxfail=1 --disable-warnings -v
 
-    # Paso 6: Detener los contenedores después de las pruebas
+    # Paso 8: Detener los contenedores después de las pruebas
     - name: Shutdown Docker containers
       if: always()
       run: |
