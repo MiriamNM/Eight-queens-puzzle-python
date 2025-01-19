@@ -16,14 +16,17 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Set up Docker and Docker Compose
+    - name: Install Docker
       run: |
         brew install docker
-        docker --version
-        # Instalar Docker Compose si no está incluido con la versión de Docker
+        docker --version  # Verifica la versión de Docker
+
+    - name: Install Docker Compose
+      run: |
+        # Descargar e instalar Docker Compose
         curl -L https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose
-        docker-compose --version  # Verifica la instalación de Docker Compose
+        docker-compose --version  # Verifica la versión de Docker Compose
 
     - name: Build and start containers using docker-compose
       run: |
