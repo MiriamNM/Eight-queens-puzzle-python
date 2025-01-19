@@ -13,11 +13,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # Paso 1: Verificar si Docker está disponible
-    - name: Check Docker is running
+    # Paso 1: Configurar Docker
+    - name: Set up Docker
       run: |
-        docker --version
-        docker info || exit 1 # Si docker info no funciona, la acción fallará.
+        brew install --cask docker
+        brew install docker-compose
+        open /Applications/Docker.app
+        done
 
     # Paso 2: Comprobar el repositorio
     - name: Checkout repository
@@ -26,7 +28,7 @@ jobs:
     # Paso 3: Construir la imagen Docker
     - name: Build Docker image
       run: |
-        docker build -t eight-queens-puzzle .
+        docker build -t eight-queens-puzzle-python .
 
     # Paso 4: Levantar el contenedor usando docker-compose
     - name: Run docker-compose
@@ -43,3 +45,4 @@ jobs:
       if: always()
       run: |
         docker-compose down
+
