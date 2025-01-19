@@ -29,16 +29,20 @@ jobs:
         docker-compose --version || docker compose version
         # Abrir Docker
         open /Applications/Docker.app
-        # Esperar a que Docker esté listo
+        # Esperar a que Docker esté completamente listo
+        echo "Esperando a que Docker esté listo..."
         while ! docker info >/dev/null 2>&1; do
           echo "Esperando a que Docker esté listo..."
           sleep 5
         done
+        echo "Docker está listo"
 
     # Paso 3: Construir la imagen Docker
     - name: Build Docker image
       run: |
         docker build -t eight-queens-puzzle .
+        # Verificar que la imagen se ha creado
+        docker images
 
     # Paso 4: Levantar los contenedores con Docker Compose
     - name: Run docker-compose
