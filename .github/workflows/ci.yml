@@ -1,70 +1,79 @@
-name: CI Workflow
+name: Python application
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  test:
+  build:
     runs-on: macos-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-    # Paso 1: Comprobar el repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Paso 1: Descargar el código
+      - uses: actions/checkout@v2
 
-    # Paso 2: Instalar Docker y Docker Compose
-    - name: Install Docker and Docker Compose
-      run: |
-        # Instalar Docker
-        brew install --cask docker
-        # Instalar Docker Compose
-        brew install docker-compose || echo "docker-compose already installed"
-        # Verificar que Docker y Docker Compose están disponibles
-        docker --version
-        docker-compose --version || docker compose version
-        # Abrir Docker
-        open /Applications/Docker.app
-        # Esperar a que Docker esté completamente listo
-        echo "Esperando a que Docker esté listo..."
-        while ! docker info >/dev/null 2>&1; do
-          echo "Esperando a que Docker esté listo..."
-          sleep 5
-        done
-        echo "Docker está listo"
+      # Paso 2: Instalar Docker y Docker Compose
+      - name: Install Docker and Docker Compose
+        run: |
+          brew install --cask docker
+          brew install docker-compose || echo "docker-compose already installed"
+          docker --version
+          docker-compose --version || docker compose version
+          open /Applications/Docker.app
+          while ! docker info >/dev/null 2>&1; do
+            echo "Esperando a que Docker esté listo..."
+            sleep 5
+          done
+          echo "Docker está listo"
 
-    # Paso 3: Construir la imagen Docker
-    - name: Build Docker image
-      run: |
-        docker build -t eight-queens-puzzle .
-        # Verificar que la imagen se ha creado
-        docker images
+      # Paso 3: Construir la imagen Docker
+      - name: Build Docker image
+        run: |
+          docker build -t eight-queens-puzzle .
+          docker images
 
-    # Paso 4: Levantar los contenedores con Docker Compose
-    - name: Run docker-compose
-      run: |
-        docker-compose up -d || docker compose up -d
-      env:
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      # Paso 4: Levantar los servicios con Docker Compose
+      - name: Start services with docker-compose
+        run: |
+          docker-compose up -d || docker compose up -d
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
-    # Paso 5: Ejecutar migraciones
-    - name: Run migrations
-      run: |
-        docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations || docker compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
+      # Paso 5: Ejecutar migraciones con Flyway
+      - name: Run database migrations
+        run: |
+          docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations || docker compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
 
-    # Paso 6: Ejecutar pruebas
-    - name: Run tests
-      run: |
-        docker-compose exec app pytest --maxfail=1 --disable-warnings -v || docker compose exec app pytest --maxfail=1 --disable-warnings -v
+      # Paso 6: Ejecutar pruebas
+      - name: Run tests with pytest
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          docker-compose exec app pytest --maxfail=1 --disable-warnings -v || docker compose exec app pytest --maxfail=1 --disable-warnings -v
 
-    # Paso 7: Detener los contenedores después de las pruebas
-    - name: Shutdown Docker containers
-      if: always()
-      run: |
-        docker-compose down || docker compose down
+      # Paso 7: Detener los servicios después de las pruebas
+      - name: Shutdown services
+        if: always()
+        run: |
+          docker-compose down || docker compose down
