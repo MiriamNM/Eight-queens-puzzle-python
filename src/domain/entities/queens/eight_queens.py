@@ -13,5 +13,10 @@ class Queens(Base):
                 default=uuid.uuid4, nullable=False)
     number_queens = Column(Integer, nullable=False)
     solutions = Column(ARRAY(String), nullable=False)
-    created_by = Column(String(150), nullable=False)
-    updated_by = Column(String(150), nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "number_queens": self.number_queens,
+            "solutions": self.solutions,
+        }

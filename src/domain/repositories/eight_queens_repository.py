@@ -8,7 +8,7 @@ class EightQueensRepository:
     def __init__(self, session):
         self.session = session
 
-    def solve_n_queens(self, n: int, email: str, queens: Queens) -> Queens:
+    def solve_n_queens(self, n: int, queens: Queens) -> Queens:
         results = []
         if n == 1 or n >= 4:
             self.recursive_function(results, [], n, 0)
@@ -19,7 +19,6 @@ class EightQueensRepository:
             id=uuid4(),
             number_queens=n,
             solutions=flat_results,
-            created_by=email,
         )
 
         self.session.add(queens_instance)
