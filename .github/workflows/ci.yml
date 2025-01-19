@@ -23,8 +23,9 @@ jobs:
 
     - name: Install Docker Compose
       run: |
-        # Descargar la última versión de Docker Compose
-        curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+        # Descargar la última versión estable de Docker Compose
+        curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+        ls -l /usr/local/bin/docker-compose  # Verifica si el archivo fue descargado correctamente
         chmod +x /usr/local/bin/docker-compose
         docker-compose --version  # Verifica la versión de Docker Compose
 
