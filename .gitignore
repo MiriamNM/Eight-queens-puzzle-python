@@ -190,7 +190,10 @@ htmlcov/
 
 src/infrastructure/session_manager.py
 
-get-pip.py
+# Ignorar archivos específicos
+.cz.toml
+.dockerignore
+.pre-commit-config.yaml
 backup.sql
 flyway.conf
-.cz.toml
+get-pip.py
