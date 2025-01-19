@@ -20,8 +20,8 @@ jobs:
       run: |
         brew install docker
         docker --version
-        # Install Docker Compose if it's not included with the Docker version
-        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        # Instalar Docker Compose si no está incluido con la versión de Docker
+        curl -L https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose
         docker-compose --version  # Verifica la instalación de Docker Compose
 
