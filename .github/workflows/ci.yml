@@ -13,38 +13,31 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # Paso 1: Configurar Docker
-    - name: Set up Docker
-      run: |
-        brew install --cask docker
-        brew install docker-compose
-        open /Applications/Docker.app
-        # Esperar a que Docker esté listo
-        while ! docker info >/dev/null 2>&1; do
-          echo "Esperando a que Docker esté listo..."
-          sleep 5
-        done
-
-    # Paso 2: Comprobar el repositorio
+    # Paso 1: Comprobar el repositorio
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    # Paso 2: Configurar Docker Compose (opcional si ya está configurado)
+    - name: Set up Docker Compose
+      run: |
+        docker-compose --version
 
     # Paso 3: Construir la imagen Docker
     - name: Build Docker image
       run: |
-        docker build -t eight-queens-puzzle .
+        docker-compose build
 
-    # Paso 4: Levantar el contenedor usando docker-compose
-    - name: Run docker-compose
+    # Paso 4: Levantar los servicios definidos en docker-compose.yml
+    - name: Start services
       run: |
         docker-compose up -d
 
-    # Paso 5: Ejecutar pruebas
+    # Paso 5: Ejecutar pruebas dentro del contenedor
     - name: Run tests
       run: |
-        docker-compose exec app pytest --maxfail=1 --disable-warnings -v
+        docker-compose exec app pytest --disable-warnings -v
 
-    # Paso 6: Detener los contenedores después de las pruebas
+    # Paso 6: Detener los servicios después de las pruebas
     - name: Shutdown Docker containers
       if: always()
       run: |

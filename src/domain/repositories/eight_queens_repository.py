@@ -13,7 +13,7 @@ class EightQueensRepository:
         if n == 1 or n >= 4:
             self.recursive_function(results, [], n, 0)
 
-        flat_results = ["".join(row) for row in results]
+        flat_results = ["\n".join(board) for board in results]
 
         queens_instance = Queens(
             id=uuid4(),
@@ -45,13 +45,13 @@ class EightQueensRepository:
         return board
 
     def recursive_function(self, result_arr: List[List[int]], current_arr: List[List[int]], n: int, row: int):
-        if row == n:  # Si todas las reinas están colocadas
+        if row == n:
             result_arr.append(self.build_board(current_arr, n))
             return
 
         for col in range(n):
             if self.is_valid_position(current_arr, [row, col]):
-                current_arr.append([row, col])  # Coloca una reina
-                # Avanza a la siguiente fila
+                current_arr.append([row, col])
+
                 self.recursive_function(result_arr, current_arr, n, row + 1)
-                current_arr.pop()  # Retrocede (backtracking)
+                current_arr.pop()
