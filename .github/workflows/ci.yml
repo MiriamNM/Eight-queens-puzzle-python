@@ -13,32 +13,38 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # Paso 1: Comprobar el repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Instalar Docker y Docker Compose
+      - name: Set up Docker and Docker Compose
+        run: |
+          brew install docker
+          brew install docker-compose
 
-    # Paso 2: Configurar Docker Compose (opcional si ya está configurado)
-    - name: Set up Docker Compose
-      run: |
-        docker-compose --version
+      # Configurar Docker para que esté listo
+      - name: Start Docker
+        run: |
+          open /Applications/Docker.app
+          while ! docker info >/dev/null 2>&1; do
+            echo "Esperando a que Docker esté listo..."
+            sleep 5
+          done
 
-    # Paso 3: Construir la imagen Docker
-    - name: Build Docker image
-      run: |
-        docker-compose build
+      # Checkout del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    # Paso 4: Levantar los servicios definidos en docker-compose.yml
-    - name: Start services
-      run: |
-        docker-compose up -d
+      # Construir la imagen Docker
+      - name: Build Docker image
+        run: docker build -t eight-queens-puzzle .
 
-    # Paso 5: Ejecutar pruebas dentro del contenedor
-    - name: Run tests
-      run: |
-        docker-compose exec app pytest --disable-warnings -v
+      # Levantar contenedor con docker-compose
+      - name: Run docker-compose
+        run: docker-compose up -d
 
-    # Paso 6: Detener los servicios después de las pruebas
-    - name: Shutdown Docker containers
-      if: always()
-      run: |
-        docker-compose down
+      # Ejecutar pruebas
+      - name: Run tests
+        run: docker-compose exec app pytest --maxfail=1 --disable-warnings -v
+
+      # Apagar los contenedores después de las pruebas
+      - name: Shutdown Docker containers
+        if: always()
+        run: docker-compose down
