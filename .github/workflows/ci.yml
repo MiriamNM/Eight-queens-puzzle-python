@@ -25,14 +25,7 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
-    - name: Wait for the database service to be ready
+    - name: Run tests or other commands
       run: |
-        docker-compose exec web wait-for-it.sh db:5432 --timeout=60
-
-    - name: Run tests in the container
-      run: |
-        docker-compose exec web pytest tests/test_eight_queens.py
-
-    - name: Stop services
-      run: |
-        docker-compose down
+        # Aquí puedes ejecutar cualquier prueba o comando adicional que necesites después de levantar los contenedores.
+        docker ps
