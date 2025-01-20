@@ -15,7 +15,7 @@ app = FastAPI()
 
 
 class RequestModel(BaseModel):
-    n: int = Field(..., ge=1, le=10)
+    n: int = Field(..., ge=4, le=10)
     context: dict
 
 
@@ -46,9 +46,9 @@ def get_queens(db_session: Session = Depends(get_db_session)):
     try:
         queens_list = db_session.query(Queens).all()
         if not queens_list:
-            return {"error": "No se encontraron soluciones almacenadas."}
+            return {"error": "No se encontraron soluciones almacenadas.", "result": None}
 
         result = [serialize_queen(queen) for queen in queens_list]
-        return {"result": str(result), "error": ""}
+        return {"result": str(result), "error": None}
     except Exception as e:
-        return {"error": "No se pueden ver las soluciones de reinas guardadas."}
+        return {"result": None, "error": "No se pueden ver las soluciones de reinas guardadas."}
