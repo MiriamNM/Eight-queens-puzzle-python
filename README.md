@@ -141,3 +141,18 @@ hight-queens-puzzle-python
 ![post](https://raw.githubusercontent.com/MiriamNM/Eight-queens-puzzle-python/refs/heads/main/public/assets/Captura%20de%20pantalla%202024-12-03%20a%20la(s)%2011.41.51%E2%80%AFp.m..png)
 
 fastApi: http://localhost:8080/docs#/
+
+12. Instrucciones para configurar `pre-commit`
+
+Este proyecto usa [pre-commit](https://pre-commit.com/) para automatizar la ejecución de ganchos (hooks) de Git antes de realizar un commit. Esto garantiza que se realicen tareas de calidad de código, como el formateo del código, antes de que se confirme un cambio.
+
+
+### Descripción de los pasos
+
+1. **Instalar `pre-commit`**: Este paso es necesario para instalar la herramienta que va a gestionar los ganchos.
+2. **Instalar los ganchos**: Aquí, se usa `pre-commit install` para configurar los ganchos en el proyecto.
+3. **Usar los ganchos**: Describe cómo se ejecutan los ganchos automáticamente al hacer un commit.
+4. **Actualizar los ganchos**: Ofrece la opción de actualizar los ganchos cuando sea necesario.
+
+Esta sección en el `README.md` permitirá que cualquier persona que trabaje en tu proyecto sepa cómo configurar y usar `pre-commit` de manera efectiva.
+
