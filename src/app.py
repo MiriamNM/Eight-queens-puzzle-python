@@ -24,11 +24,6 @@ class ResponseModel(BaseModel):
     error: Optional[str] = None
 
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the Eight Queens Puzzle API"}
-
-
 @app.post("/queens/", response_model=ResponseModel)
 def solve(request: RequestModel, db_session: Session = Depends(get_db_session)):
     try:

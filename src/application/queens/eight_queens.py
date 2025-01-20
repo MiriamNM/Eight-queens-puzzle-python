@@ -1,9 +1,14 @@
+from pydantic import BaseModel, Field
 from result import Err, Ok
 from domain.entities.queens.eight_queens import Queens
 from domain.repositories.eight_queens_repository import EightQueensRepository
 
 
-def queens_create(data, db_session) -> Ok | Err:
+class QueensInput(BaseModel):
+    n: int = Field(default=8, ge=4, le=16)
+
+
+def queens_create(data: QueensInput, db_session) -> Ok | Err:
     try:
         n = getattr(data, 'n', 8)
 
