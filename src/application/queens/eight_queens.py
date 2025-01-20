@@ -3,23 +3,17 @@ from domain.entities.queens.eight_queens import Queens
 from domain.repositories.eight_queens_repository import EightQueensRepository
 
 
-def queens_create(data, context):
+def queens_create(data, db_session) -> Ok | Err:
     try:
-        n = data.get('n', 8)
-        email = context.get('email')
-        session = context.get('db_session')
+        n = getattr(data, 'n', 8)
 
-        if not session:
-            raise Exception("Database session not provided in context")
-
-        repository = EightQueensRepository(session)
-        queens = repository.solve_n_queens(n, email, Queens)
+        repository = EightQueensRepository(db_session)
+        queens = repository.solve_n_queens(n, Queens)
 
         return Ok({
-            "id": queens.id,
+            "id": str(queens.id),
             "number_queens": queens.number_queens,
             "solutions": queens.solutions,
-            "created_by": queens.created_by,
         })
     except Exception as e:
-        return Err(e)
+        return Err(f"Error creating queens")
