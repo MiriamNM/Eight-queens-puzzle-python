@@ -1,5 +1,4 @@
 import logging
-from sre_constants import SUCCESS
 from typing import Optional
 from pydantic import BaseModel, Field
 from fastapi import Depends, FastAPI
@@ -10,6 +9,7 @@ from domain.entities.queens.eight_queens import Queens
 from infrastructure.entity_manager import get_db_session
 from utils.error_messages import ERRORS
 from utils.serealize_queen import serialize_queen
+from utils.success_messages import SUCCESS_MESSAGE
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +30,8 @@ class ResponseModel(BaseModel):
 def solve(request: RequestModel, db_session: Session = Depends(get_db_session)):
     try:
         response = queens_create(request, db_session)
-        return {"result": SUCCESS.queens_are_kept, "error": ""}
+        return {"result": SUCCESS_MESSAGE.queens_are_kept, "error": ""}
     except Exception as e:
-        print(f"Error in solve: {e}")
         return {"result": "", "error": ERRORS.cloud_not_created}
 
 
