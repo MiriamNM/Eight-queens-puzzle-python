@@ -25,9 +25,8 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
-    - name: Wait for the services to be ready
+    - name: Wait for the database service to be ready
       run: |
-        # Asegúrate de que el nombre del servicio y el puerto coincidan con tu configuración
         docker-compose exec web wait-for-it.sh db:5432 --timeout=60
 
     - name: Run tests in the container
