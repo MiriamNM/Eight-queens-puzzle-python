@@ -27,15 +27,13 @@ jobs:
 
     - name: Wait for the services to be ready
       run: |
-        # Esperar a que los contenedores estén listos, ajusta según tu servicio.
-        docker-compose exec <your-service-name> wait-for-it.sh <service-host>:<port> --timeout=60
+        # Asegúrate de que el nombre del servicio y el puerto coincidan con tu configuración
+        docker-compose exec web wait-for-it.sh db:5432 --timeout=60
 
     - name: Run tests in the container
       run: |
-        # Ejecuta las pruebas dentro del contenedor que contiene tu aplicación.
-        docker-compose exec <your-service-name> pytest tests/test_eight_queens.py
+        docker-compose exec web pytest tests/test_eight_queens.py
 
     - name: Stop services
       run: |
-        # Detener los contenedores después de la ejecución de las pruebas
         docker-compose down
