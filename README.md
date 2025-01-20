@@ -11,8 +11,8 @@
 Store the solutions in postgres
 
 ## Next steps
+- 
 - Return answers to solutions with pagination
-- Implement the frontend.
 
 ## Requirements
 
