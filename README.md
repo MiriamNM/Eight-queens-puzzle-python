@@ -149,10 +149,12 @@ Este proyecto usa [pre-commit](https://pre-commit.com/) para automatizar la ejec
 
 ### Descripción de los pasos
 
-1. **Instalar `pre-commit`**: Este paso es necesario para instalar la herramienta que va a gestionar los ganchos.
-2. **Instalar los ganchos**: Aquí, se usa `pre-commit install` para configurar los ganchos en el proyecto.
-3. **Usar los ganchos**: Describe cómo se ejecutan los ganchos automáticamente al hacer un commit.
-4. **Actualizar los ganchos**: Ofrece la opción de actualizar los ganchos cuando sea necesario.
+1. **Instalar dependencias**: `pre-commit` se instala automáticamente junto con las demás librerías al ejecutar:
+   ```bash
+   pip install -r requirements.txt
+2. Preparar los cambios: Añade los archivos modificados al área de preparación con: git add . o git add 'archivo'
+3. Hacer el commit: Usa el comando para crear un mensaje de commit estandarizado con Commitizen: cz c o cz commit
+4. Subir el código: Envía tus cambios al repositorio remoto con: git push origin "branch"
 
-Esta sección en el `README.md` permitirá que cualquier persona que trabaje en tu proyecto sepa cómo configurar y usar `pre-commit` de manera efectiva.
+*** Con estos pasos, aseguras que los mensajes de commit sigan un formato estándar y que el código pase las verificaciones de calidad antes de ser enviado.
 
