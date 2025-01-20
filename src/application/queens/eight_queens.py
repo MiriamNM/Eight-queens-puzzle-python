@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from result import Err, Ok
 from domain.entities.queens.eight_queens import Queens
 from domain.repositories.eight_queens_repository import EightQueensRepository
+from utils.error_messages import ERRORS
 
 
 class QueensInput(BaseModel):
@@ -21,4 +22,4 @@ def queens_create(data: QueensInput, db_session) -> Ok | Err:
             "solutions": result.solutions,
         })
     except Exception as e:
-        return Err(f"Error creating queens: {str(e)}")
+        return Err(f"{ERRORS.error_creating}: {str(e)}")
