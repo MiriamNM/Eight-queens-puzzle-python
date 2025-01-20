@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from result import Err
 
 from domain.entities.queens.eight_queens import Queens
+from utils.error_messages import ERRORS
 
 
 class QueensInput(BaseModel):
@@ -19,7 +20,7 @@ class EightQueensRepository:
         try:
             QueensInput(n=n)
         except Exception as e:
-            return Err(f"Error en el número de las reinas: {str(e)}")
+            return Err(f"{ERRORS.error_number}: {str(e)}")
 
         results = []
         if n == 1 or n >= 4:

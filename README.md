@@ -142,26 +142,24 @@ hight-queens-puzzle-python
 
 fastApi: http://localhost:8080/docs#/
 
-12. Instrucciones para configurar `pre-commit`
+12. Instructions for Configuring `pre-commit`
 
-Este proyecto usa [pre-commit](https://pre-commit.com/) para automatizar la ejecución de ganchos (hooks) de Git antes de realizar un commit. Esto garantiza que se realicen tareas de calidad de código, como el formateo del código, antes de que se confirme un cambio.
+This project uses [pre-commit](https://pre-commit.com/) to automate the execution of Git hooks before making a commit. This ensures that quality tasks, such as code formatting, are performed before any changes are confirmed.
+### Steps Description
 
-
-### Descripción de los pasos
-
-1. **Instalar dependencias**: `pre-commit` se instala automáticamente junto con las demás librerías al ejecutar:
+1. **Install dependencies**: `pre-commit` is installed automatically along with other libraries when you run:
    ```bash
    pip install -r requirements.txt
-2. Preparar los cambios: Añade los archivos modificados al área de preparación con: 
+2. Prepare changes: Add the modified files to the staging area using
    ```bash
       git add . 
       git add 'archivo'
-3. Hacer el commit: Usa el comando para crear un mensaje de commit estandarizado con Commitizen: 
+3. Make the commit: Use the command to create a standardized commit message with Commitizen
    ```bash
       cz c 
       cz commit
-4. Subir el código: Envía tus cambios al repositorio remoto con: 
+4. Push the code: Send your changes to the remote repository using
    ```bash
       git push origin "branch"
-*** Con estos pasos, aseguras que los mensajes de commit sigan un formato estándar y que el código pase las verificaciones de calidad antes de ser enviado.
+- By following these steps, you ensure that commit messages follow a standard format and that the code passes quality checks before being pushed.
 
