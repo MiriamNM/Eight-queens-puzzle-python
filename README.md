@@ -88,23 +88,7 @@ hight-queens-puzzle-python
 ### Commands to: create and activate python environment and install dependencies
 
    ```bash
-   # create python environment
-   make create-venv
-
-   # activate python environment
-   source venv/bin/activate
-
-   # disable python environment
-   deactivate
-
-   # install dependencies
-   make install
-   ```
-
-9. Makefile commands for: build, start, stop, restart, status, rebuild, logs, and bash
-
-   ```bash
-      # Create virtual environment
+    # Create virtual environment
       create-venv:
          python -m venv venv
          @echo "Activate the virtual environment with 'source venv/bin/activate'"
@@ -118,7 +102,11 @@ hight-queens-puzzle-python
          pip install --upgrade pip
          pip install -r requirements.txt
          uvicorn src.app:app --host 0.0.0.0 --port 8080 --reload
-      
+   ```
+
+9. Makefile commands for: build, start, stop, restart, status, rebuild, logs, and bash
+
+   ```bash 
       # Start services with Docker Compose
       up:
          docker-compose up -d
