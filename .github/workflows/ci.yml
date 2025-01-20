@@ -25,7 +25,17 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
-    - name: Run tests or other commands
+    - name: Wait for the services to be ready
       run: |
-        # Aquí puedes ejecutar cualquier prueba o comando adicional que necesites después de levantar los contenedores.
-        docker ps
+        # Esperar a que los contenedores estén listos, ajusta según tu servicio.
+        docker-compose exec <your-service-name> wait-for-it.sh <service-host>:<port> --timeout=60
+
+    - name: Run tests in the container
+      run: |
+        # Ejecuta las pruebas dentro del contenedor que contiene tu aplicación.
+        docker-compose exec <your-service-name> pytest tests/test_eight_queens.py
+
+    - name: Stop services
+      run: |
+        # Detener los contenedores después de la ejecución de las pruebas
+        docker-compose down
