@@ -1,8 +1,8 @@
 import logging
-from typing import Dict, List
-from pydantic import BaseModel
-from fastapi import Depends, FastAPI, HTTPException
-from result import Ok
+from typing import Optional
+from pydantic import BaseModel, Field
+from fastapi import Depends, FastAPI
+from result import Ok, Err
 from sqlalchemy.orm import Session
 from application.queens.eight_queens import queens_create
 from domain.entities.queens.eight_queens import Queens
@@ -15,13 +15,13 @@ app = FastAPI()
 
 
 class RequestModel(BaseModel):
-    n: int
+    n: int = Field(..., ge=1, le=10)
     context: dict
 
 
 class ResponseModel(BaseModel):
-    result: str
-    error: str
+    result: Optional[str] = None
+    error: Optional[str] = None
 
 
 @app.get("/")
@@ -36,23 +36,19 @@ def solve(request: RequestModel, db_session: Session = Depends(get_db_session)):
         if isinstance(response, Ok):
             return {"success": True, "result": "Se guardaron las reinas", "error": ""}
         else:
-            raise HTTPException(status_code=500, detail=str(response.value))
+            return {"result": "", "error": str(response.value)}
     except Exception as e:
-        logger.exception("Unexpected error occurred.")
-        raise HTTPException(
-            status_code=500, detail="An unexpected error occurred.")
+        return {"result": "", "error": "No se pudieron crear las distintas opciones de las reinas"}
 
 
 @app.get("/queens/", response_model=ResponseModel)
 def get_queens(db_session: Session = Depends(get_db_session)):
     try:
         queens_list = db_session.query(Queens).all()
+        if not queens_list:
+            return {"error": "No se encontraron soluciones almacenadas."}
 
-        result = ""
         result = [serialize_queen(queen) for queen in queens_list]
-        return {"success": True, "result": str(result), "error": ""}
+        return {"result": str(result), "error": ""}
     except Exception as e:
-        logger.exception("Error al obtener las reinas desde la base de datos.")
-        raise HTTPException(
-            status_code=500, detail="Error al obtener los elementos de la tabla `queens`."
-        )
+        return {"error": "No se pueden ver las soluciones de reinas guardadas."}
