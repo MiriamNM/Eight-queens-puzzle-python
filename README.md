@@ -152,9 +152,16 @@ Este proyecto usa [pre-commit](https://pre-commit.com/) para automatizar la ejec
 1. **Instalar dependencias**: `pre-commit` se instala automáticamente junto con las demás librerías al ejecutar:
    ```bash
    pip install -r requirements.txt
-2. Preparar los cambios: Añade los archivos modificados al área de preparación con: git add . o git add 'archivo'
-3. Hacer el commit: Usa el comando para crear un mensaje de commit estandarizado con Commitizen: cz c o cz commit
-4. Subir el código: Envía tus cambios al repositorio remoto con: git push origin "branch"
-
+2. Preparar los cambios: Añade los archivos modificados al área de preparación con: 
+   ```bash
+      git add . 
+      git add 'archivo'
+3. Hacer el commit: Usa el comando para crear un mensaje de commit estandarizado con Commitizen: 
+   ```bash
+      cz c 
+      cz commit
+4. Subir el código: Envía tus cambios al repositorio remoto con: 
+   ```bash
+      git push origin "branch"
 *** Con estos pasos, aseguras que los mensajes de commit sigan un formato estándar y que el código pase las verificaciones de calidad antes de ser enviado.
 
