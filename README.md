@@ -104,30 +104,59 @@ hight-queens-puzzle-python
 9. Makefile commands for: build, start, stop, restart, status, rebuild, logs, and bash
 
    ```bash
-   # compile the image
-   make build
+      # Create virtual environment
+      create-venv:
+         python -m venv venv
+         @echo "Activate the virtual environment with 'source venv/bin/activate'"
 
-   # llift the container
-   make start
+      # Install dependencies
+      Install: 
+         pip install -r requirements.txt
 
-   # stops the container
-   make stop
+      # To ensure all dependencies are correctly installed, especially uvicorn and fastapi.
+      test-requirements:
+         pip install --upgrade pip
+         pip install -r requirements.txt
+         uvicorn src.app:app --host 0.0.0.0 --port 8080 --reload
+      
+      # Start services with Docker Compose
+      up:
+         docker-compose up -d
 
-   # restart the container
-   make restart
+      # Stop services
+      down:
+         docker-compose down
 
-   # shows the status of the container
-   make status
+      # Rebuild and restart all services
+      restart: stop start
 
-   # stops, builds and starts the worker container
-   make rebuild
+      # Rebuild the services and remove volumes and images
+      rebuild: 
+         docker-compose down --volumes --rmi all
+         docker-compose --env-file .env up --build
+         docker compose up -d
 
-   # mshow container logs
-   make logs
+      # Check the status of services
+      status:
+         docker compose ps
 
-   # Show database
-   make queens
+      # Follow logs from services
+      logs:
+         docker compose logs -f
 
+      # Access the database
+      queens: 
+         docker exec -it eight_queens_db psql -U mirichi -d eight_queens_db
+
+      # Run migrations
+      migrate:
+         @echo "Migrating schema: public"
+         docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
+
+      # Undo the last migration
+      undo:
+         @echo "Undoing migration on schema: public"
+         docker-compose run --rm flyway undo -schemas=public -locations=filesystem:/flyway/sql/migrations
    ```
 10. Platforms to make http requests
    - Insomnia

@@ -4,7 +4,6 @@ create-venv:
 
 Install: 
 	pip install -r requirements.txt
-	pip install -r requirements-dev.txt
 
 #Para asegurar que todas las dependencias estan correctamente, sobretodo uvicorn y fastapi.
 test-requirements:
@@ -39,6 +38,7 @@ status:
 logs:
 	docker compose logs -f
 
+# Ver la base de datos
 queens: 
 	docker exec -it eight_queens_db psql -U mirichi -d eight_queens_db
 
