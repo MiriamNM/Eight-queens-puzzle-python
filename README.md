@@ -22,13 +22,6 @@ Store the solutions in postgres
 - postman 
 - visual studio code
 
-## Comandos
-
-- Build: `make build`
-- Rebuild: `make rebuild`
-- Raise services: `make up`
-- Run tests: `make test`
-
 ## Estructura
 
 ```bash
