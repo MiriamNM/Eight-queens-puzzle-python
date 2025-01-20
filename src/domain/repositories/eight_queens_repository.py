@@ -1,7 +1,14 @@
 from typing import List
 from uuid import uuid4
 
+from pydantic import BaseModel, Field
+from result import Err
+
 from domain.entities.queens.eight_queens import Queens
+
+
+class QueensInput(BaseModel):
+    n: int = Field(default=8, ge=4, le=16)
 
 
 class EightQueensRepository:
@@ -9,6 +16,11 @@ class EightQueensRepository:
         self.session = session
 
     def solve_n_queens(self, n: int, queens: Queens) -> Queens:
+        try:
+            QueensInput(n=n)
+        except Exception as e:
+            return Err(f"Error en el número de las reinas: {str(e)}")
+
         results = []
         if n == 1 or n >= 4:
             self.recursive_function(results, [], n, 0)
