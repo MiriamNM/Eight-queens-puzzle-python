@@ -47,4 +47,3 @@ jobs:
     - name: Run tests
       run: |
         docker exec eight_queens_app pytest --maxfail=5 --disable-warnings -v  # Ejecutamos las pruebas en el contenedor de la app
-
