@@ -1,15 +1,16 @@
 create-venv:
-	python -m venv venv
-	@echo "ejecutar el entorno virtual con 'source venv/bin/activate'"
+	python3.11 -m venv venv
+	@echo "Entorno virtual creado con Python 3.11."
+	@echo "Ejecuta 'source venv/bin/activate' para activarlo."
 
-Install: 
+install: 
 	pip install -r requirements.txt
 
 #Para asegurar que todas las dependencias estan correctamente, sobretodo uvicorn y fastapi.
 test-requirements:
-	pip install --upgrade pip
-	pip install -r requirements.txt
+	pip install --no-cache-dir -r requirements.txt
 	uvicorn src.app:app --host 0.0.0.0 --port 8080 --reload
+
 
 # Construir la imagen
 build:
@@ -22,9 +23,6 @@ up:
 # Detener los servicios
 down:
 	docker-compose down
-
-# Recostruir y reinicar todos los servicios
-restart: stop start
 
 rebuild: 
 	docker-compose down --volumes --rmi all
