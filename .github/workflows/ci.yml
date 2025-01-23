@@ -25,6 +25,13 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
+    - name: Wait for DB container to be ready
+      run: |
+        until docker exec eight_queens_db pg_isready -U postgres; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 5
+        done
+
     - name: Install dependencies
       run: |
         docker exec eight_queens_db pip install -r requirements.txt
@@ -32,4 +39,3 @@ jobs:
     - name: Run tests
       run: |
         docker exec eight_queens_db pytest --maxfail=5 --disable-warnings -v
- 
