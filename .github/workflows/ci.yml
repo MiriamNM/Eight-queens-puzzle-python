@@ -27,17 +27,17 @@ jobs:
 
     - name: Wait for DB container to be ready (with timeout)
       run: |
-        MAX_RETRIES=6  # Esperar 30 segundos (6 intentos de 5 segundos)
-        RETRIES=0
-        until docker exec eight_queens_db pg_isready -U postgres || [ $RETRIES -ge $MAX_RETRIES ]; do
-          echo "Waiting for PostgreSQL to be ready... Attempt $((RETRIES+1))/$MAX_RETRIES"
-          RETRIES=$((RETRIES+1))
+        MAX_TRIES=12
+        COUNTER=0
+        until docker exec eight_queens_db pg_isready -U postgres; do
+          COUNTER=$((COUNTER+1))
+          if [ $COUNTER -ge $MAX_TRIES ]; then
+            echo "Timeout reached. Database is not ready."
+            exit 1
+          fi
+          echo "Waiting for PostgreSQL to be ready... Attempt $COUNTER/$MAX_TRIES"
           sleep 5
         done
-
-        if [ $RETRIES -ge $MAX_RETRIES ]; then
-          echo "PostgreSQL container not ready after $MAX_RETRIES attempts. Continuing anyway."
-        fi
 
     - name: Install dependencies
       run: |
