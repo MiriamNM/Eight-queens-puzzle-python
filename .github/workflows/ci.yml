@@ -25,12 +25,19 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
-    - name: Wait for DB container to be ready
+    - name: Wait for DB container to be ready (with timeout)
       run: |
-        until docker exec eight_queens_db pg_isready -U postgres; do
-          echo "Waiting for PostgreSQL to be ready..."
+        MAX_RETRIES=6  # Esperar 30 segundos (6 intentos de 5 segundos)
+        RETRIES=0
+        until docker exec eight_queens_db pg_isready -U postgres || [ $RETRIES -ge $MAX_RETRIES ]; do
+          echo "Waiting for PostgreSQL to be ready... Attempt $((RETRIES+1))/$MAX_RETRIES"
+          RETRIES=$((RETRIES+1))
           sleep 5
         done
+
+        if [ $RETRIES -ge $MAX_RETRIES ]; then
+          echo "PostgreSQL container not ready after $MAX_RETRIES attempts. Continuing anyway."
+        fi
 
     - name: Install dependencies
       run: |
