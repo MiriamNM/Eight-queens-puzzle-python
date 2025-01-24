@@ -1,5 +1,5 @@
 create-venv:
-	python3.11 -m venv venv
+	python3.11 -m venv queens
 	@echo "Entorno virtual creado con Python 3.11."
 	@echo "Ejecuta 'source venv/bin/activate' para activarlo."
 
