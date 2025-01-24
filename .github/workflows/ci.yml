@@ -32,25 +32,16 @@ jobs:
         brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
         sleep 10  # Pausa para permitir que PostgreSQL inicie
-        /opt/homebrew/opt/postgresql@15/bin/psql -U "$(whoami)" -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;"
-        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE DATABASE eight_queens_db;"
+        # Crear rol postgres y base de datos en PostgreSQL
+        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;" || echo "Role already exists"
+        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE DATABASE eight_queens_db;" || echo "Database already exists"
+        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -d eight_queens_db -c "GRANT ALL PRIVILEGES ON DATABASE eight_queens_db TO postgres;" || echo "Privileges already granted"
       env:
         POSTGRES_HOST: "localhost"
         POSTGRES_PORT: "5432"
         POSTGRES_USER: "postgres"
         POSTGRES_PASSWORD: "your_password"
         POSTGRES_DB: "eight_queens_db"
-
-    - name: Run Python script to interact with PostgreSQL
-      run: |
-        python3 your_script.py
-      env:
-        POSTGRES_HOST: "localhost"
-        POSTGRES_PORT: "5432"
-        POSTGRES_USER: "postgres"
-        POSTGRES_PASSWORD: "your_password"
-        POSTGRES_DB: "eight_queens_db"
-
 
     - name: Run migrations
       run: |
