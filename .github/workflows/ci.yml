@@ -27,11 +27,14 @@ jobs:
     - name: Install and start PostgreSQL
       run: |
         brew install postgresql@15
+        echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.bash_profile
+        source ~/.bash_profile
         brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
         sleep 10  # Pausa para permitir que PostgreSQL inicie
-        psql -U "$(whoami)" -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;"
-        psql -U postgres -c "CREATE DATABASE eight_queens_db;"
+        /opt/homebrew/opt/postgresql@15/bin/psql -U "$(whoami)" -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;"
+        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE DATABASE eight_queens_db;"
+
 
     - name: Run migrations
       run: |
