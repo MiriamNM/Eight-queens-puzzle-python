@@ -32,10 +32,17 @@ jobs:
         brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
         
-        # Esperar hasta que PostgreSQL esté listo
+        # Intentar conectar con un tiempo de espera extendido
+        MAX_RETRIES=30
+        RETRIES=0
         until /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "SELECT 1" > /dev/null 2>&1; do
+          if [ $RETRIES -ge $MAX_RETRIES ]; then
+            echo "PostgreSQL is not ready after $MAX_RETRIES attempts."
+            exit 1
+          fi
           echo "Waiting for PostgreSQL to be ready..."
-          sleep 1
+          sleep 2
+          RETRIES=$((RETRIES+1))
         done
 
         # Crear el rol y la base de datos
