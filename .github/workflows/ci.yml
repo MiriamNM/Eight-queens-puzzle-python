@@ -31,8 +31,14 @@ jobs:
         source ~/.bash_profile
         brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
-        sleep 10  # Pausa para permitir que PostgreSQL inicie
-        # Crear rol postgres y base de datos en PostgreSQL
+        
+        # Esperar hasta que PostgreSQL esté listo
+        until /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "SELECT 1" > /dev/null 2>&1; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 1
+        done
+
+        # Crear el rol y la base de datos
         /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;" || echo "Role already exists"
         /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE DATABASE eight_queens_db;" || echo "Database already exists"
         /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -d eight_queens_db -c "GRANT ALL PRIVILEGES ON DATABASE eight_queens_db TO postgres;" || echo "Privileges already granted"
@@ -43,10 +49,15 @@ jobs:
         POSTGRES_PASSWORD: "your_password"
         POSTGRES_DB: "eight_queens_db"
 
-    - name: Run migrations
+    - name: Install Flyway
       run: |
-        flyway -url=jdbc:postgresql://localhost:5432/eight_queens_db \
-        -user=postgres -password=yourpassword migrate
+        brew install flyway
+        echo "Flyway installed successfully."
+
+    - name: Run Flyway migrations
+      run: |
+        flyway -url=jdbc:postgresql://localhost:5432/eight_queens_db -user=postgres -password=your_password migrate
+
 
     - name: Run tests
       run: |
