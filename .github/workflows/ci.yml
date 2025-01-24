@@ -34,6 +34,22 @@ jobs:
         sleep 10  # Pausa para permitir que PostgreSQL inicie
         /opt/homebrew/opt/postgresql@15/bin/psql -U "$(whoami)" -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;"
         /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE DATABASE eight_queens_db;"
+      env:
+        POSTGRES_HOST: "localhost"
+        POSTGRES_PORT: "5432"
+        POSTGRES_USER: "postgres"
+        POSTGRES_PASSWORD: "your_password"
+        POSTGRES_DB: "eight_queens_db"
+
+    - name: Run Python script to interact with PostgreSQL
+      run: |
+        python3 your_script.py
+      env:
+        POSTGRES_HOST: "localhost"
+        POSTGRES_PORT: "5432"
+        POSTGRES_USER: "postgres"
+        POSTGRES_PASSWORD: "your_password"
+        POSTGRES_DB: "eight_queens_db"
 
 
     - name: Run migrations
