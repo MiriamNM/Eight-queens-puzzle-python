@@ -26,11 +26,12 @@ jobs:
 
     - name: Install and start PostgreSQL
       run: |
-        brew install postgresql@14
-        brew services start postgresql@14
+        brew install postgresql@15
+        brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
         sleep 10  # Pausa para permitir que PostgreSQL inicie
-        psql -c "CREATE DATABASE eight_queens_db;" -U postgres
+        psql -U "$(whoami)" -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;"
+        psql -U postgres -c "CREATE DATABASE eight_queens_db;"
 
     - name: Run migrations
       run: |
