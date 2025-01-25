@@ -43,11 +43,11 @@ jobs:
         if ! pgrep -x "Docker" > /dev/null; then
           echo "Docker not running. Starting Docker..."
           open -a Docker
-          sleep 30  # Esperar a que Docker inicie correctamente
+          sleep 30  # Esperar 30 segundos a que Docker inicie completamente
         else
           echo "Docker is already running"
         fi
-        docker info || exit 1  # Verificar si Docker está correctamente funcionando
+        docker info || exit 1  # Verificar que Docker esté correctamente funcionando
 
     - name: Start services using docker-compose
       run: |
