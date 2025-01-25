@@ -31,12 +31,23 @@ jobs:
         ln -s /opt/homebrew/lib/docker/cli-plugins/docker-compose ~/.docker/cli-plugins/docker-compose
         echo '{"cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"]}' > ~/.docker/config.json
         echo "Docker Compose plugin configured."
+
+    - name: Start Docker if not running
+      run: |
+        if ! pgrep -x "Docker" > /dev/null; then
+          echo "Starting Docker..."
+          open -a Docker
+          sleep 30 # Give Docker some time to start
+        else
+          echo "Docker is already running"
+        fi
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Verify Docker installation
+    - name: Verify Docker is running
       run: |
+        sudo launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist || echo "Daemon already loaded"
         docker info
 
     - name: Start services using docker-compose
