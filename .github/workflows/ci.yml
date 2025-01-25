@@ -48,6 +48,7 @@ jobs:
         else
           echo "Docker ya está en ejecución."
         fi
+        
         # Verificar si docker está accesible
         docker info || (echo "No se puede conectar a Docker. Intentando reiniciar el daemon." && sudo killall Docker && open -a Docker && sleep 30 && docker info)
 
