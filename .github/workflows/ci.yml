@@ -9,19 +9,6 @@ jobs:
   build-and-test:
     runs-on: macos-latest
 
-  
-    services:
-        postgres:
-          image: postgres:latest
-          env:
-            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-            POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          ports:
-            - 5432:5432
-          # Command to check if the database is ready
-          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
     - name: Check out code
       uses: actions/checkout@v2
@@ -40,44 +27,15 @@ jobs:
     - name: Install and start PostgreSQL
       run: |
         brew install postgresql@15
-        echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.bash_profile
-        source ~/.bash_profile
         brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
-        
-        # Intentar conectar con un tiempo de espera extendido
-        MAX_RETRIES=30
-        RETRIES=0
-        until /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "SELECT 1" > /dev/null 2>&1; do
-          if [ $RETRIES -ge $MAX_RETRIES ]; then
-            echo "PostgreSQL is not ready after $MAX_RETRIES attempts."
-            exit 1
-          fi
-          echo "Waiting for PostgreSQL to be ready..."
-          sleep 2
-          RETRIES=$((RETRIES+1))
-        done
+        sleep 10  # Pausa para permitir que PostgreSQL inicie
+        psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" -U postgres
 
-        # Crear el rol y la base de datos
-        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE ROLE postgres WITH SUPERUSER LOGIN;" || echo "Role already exists"
-        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -c "CREATE DATABASE eight_queens_db;" || echo "Database already exists"
-        /opt/homebrew/opt/postgresql@15/bin/psql -U postgres -d eight_queens_db -c "GRANT ALL PRIVILEGES ON DATABASE eight_queens_db TO postgres;" || echo "Privileges already granted"
-      env:
-        POSTGRES_HOST: "localhost"
-        POSTGRES_PORT: "5432"
-        POSTGRES_USER: "postgres"
-        POSTGRES_PASSWORD: "your_password"
-        POSTGRES_DB: "eight_queens_db"
-
-    - name: Install Flyway
+    - name: Run migrations
       run: |
-        brew install flyway
-        echo "Flyway installed successfully."
-
-    - name: Run Flyway migrations
-      run: |
-        flyway -url=jdbc:postgresql://localhost:5432/eight_queens_db -user=postgres -password=your_password migrate
-
+        flyway -url=jdbc:postgresql://localhost:5432/${{ secrets.POSTGRES_DB }} \
+        -user=${{ secrets.POSTGRES_USER }} -password=${{ secrets.POSTGRES_PASSWORD }} migrate
 
     - name: Run tests
       run: |
