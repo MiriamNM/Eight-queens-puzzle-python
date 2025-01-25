@@ -24,6 +24,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Start Docker daemon
+      run: |
+        sudo launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist
+        open /Applications/Docker.app
+        echo "Waiting for Docker daemon to start..."
+        sleep 20  # Tiempo para que el demonio de Docker inicie
+
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -36,13 +44,30 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
-    - name: Install and start PostgreSQL
+    - name: Install PostgreSQL
       run: |
         brew install postgresql@15
+        echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.bash_profile
+        source ~/.bash_profile
+
+    - name: Start PostgreSQL
+      run: |
         brew services start postgresql@15
         echo "Waiting for PostgreSQL to start..."
-        sleep 10  # Pausa para permitir que PostgreSQL inicie
-        psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" -U postgres
+        sleep 10
+      env:
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+
+    - name: Set up database
+      run: |
+        psql -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" || echo "Database already exists"
+        psql -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};" || echo "Privileges already granted"
+
+    - name: Install Flyway
+      run: |
+        brew install flyway
 
     - name: Run migrations
       run: |
