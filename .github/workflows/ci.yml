@@ -37,7 +37,7 @@ jobs:
 
     - name: Verify Docker is running
       run: |
-        docker info
+        docker info || (echo "Docker is not running. Trying to start it..." && sudo launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist && sleep 10 && docker info)
 
     - name: Start services using docker-compose
       run: |
