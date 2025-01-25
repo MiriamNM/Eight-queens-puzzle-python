@@ -24,35 +24,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Install Docker on macOS
+    - name: Install Docker and Docker Compose
       run: |
-        brew install --cask docker
-        open /Applications/Docker.app
+        brew install docker docker-compose
+        brew services start docker
         echo "Waiting for Docker daemon to start..."
-        sleep 30  # Tiempo para que el demonio Docker se inicie
-
-    - name: Start Docker daemon
-      run: |
-        sudo launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist || echo "Daemon already loaded"
-        echo "Starting Docker Desktop..."
-        open /Applications/Docker.app
-        echo "Waiting for Docker daemon to start..."
-        sleep 30
-        docker ps || echo "Docker is not running. Check your configuration."
+        sleep 15
+        docker ps || (echo "Docker daemon is not running. Exiting." && exit 1)
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
     - name: Verify Docker installation
       run: docker info
-
-    - name: Install Docker Compose (if not installed)
-      run: |
-        if ! [ -x "$(command -v docker-compose)" ]; then
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-        fi
-        docker-compose --version
 
     - name: Start services using docker-compose
       run: |
