@@ -40,7 +40,14 @@ jobs:
 
     - name: Verify Docker is running
       run: |
-        docker info || (echo "Docker not running. Starting Docker..." && open -a Docker && sleep 30 && docker info)
+        if ! pgrep -x "Docker" > /dev/null; then
+          echo "Docker not running. Starting Docker..."
+          open -a Docker
+          sleep 30  # Esperar a que Docker inicie correctamente
+        else
+          echo "Docker is already running"
+        fi
+        docker info || exit 1  # Verificar si Docker está correctamente funcionando
 
     - name: Start services using docker-compose
       run: |
