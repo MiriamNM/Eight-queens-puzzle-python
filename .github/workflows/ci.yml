@@ -32,23 +32,13 @@ jobs:
         echo '{"cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"]}' > ~/.docker/config.json
         echo "Docker Compose plugin configured."
 
-    - name: Start Docker Desktop
-      run: |
-        open --background -a Docker
-        echo "Waiting for Docker daemon to start..."
-        sleep 30
-        docker ps || (echo "Docker daemon is not running. Exiting." && exit 1)
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
     - name: Verify Docker installation
       run: docker info
 
     - name: Start services using docker-compose
       run: |
         docker-compose -f docker-compose.yml up --build -d
-        
+
     - name: Install PostgreSQL
       run: |
         brew install postgresql@15
