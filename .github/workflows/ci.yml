@@ -27,9 +27,16 @@ jobs:
     - name: Install Docker and Docker Compose
       run: |
         brew install docker docker-compose
-        brew services start docker
+        mkdir -p ~/.docker/cli-plugins
+        ln -s /opt/homebrew/lib/docker/cli-plugins/docker-compose ~/.docker/cli-plugins/docker-compose
+        echo '{"cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"]}' > ~/.docker/config.json
+        echo "Docker Compose plugin configured."
+
+    - name: Start Docker Desktop
+      run: |
+        open --background -a Docker
         echo "Waiting for Docker daemon to start..."
-        sleep 15
+        sleep 30
         docker ps || (echo "Docker daemon is not running. Exiting." && exit 1)
 
     - name: Set up Docker Buildx
@@ -41,7 +48,7 @@ jobs:
     - name: Start services using docker-compose
       run: |
         docker-compose -f docker-compose.yml up --build -d
-
+        
     - name: Install PostgreSQL
       run: |
         brew install postgresql@15
