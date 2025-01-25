@@ -32,7 +32,7 @@ jobs:
         sleep 30  # Tiempo para que el demonio Docker se inicie
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
     - name: Install Docker Compose
       run: |
