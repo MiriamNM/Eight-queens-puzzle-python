@@ -46,9 +46,8 @@ jobs:
         url: jdbc:postgresql://db:5432/${{ secrets.POSTGRES_DB }}
         user: ${{ secrets.POSTGRES_USER }}
         password: ${{ secrets.POSTGRES_PASSWORD }}
-        locations: filesystem:/flyway/sql
+        locations: filesystem:./migrations
         extraArgs: -outOfOrder=true
-
         
     - name: Run tests
       run: |
