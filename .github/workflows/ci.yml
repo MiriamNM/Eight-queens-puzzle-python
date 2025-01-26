@@ -42,14 +42,21 @@ jobs:
 
     - name: Test database connection
       run: |
-        psql -h db -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"
+        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"
       env:
         PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5432; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 5
+        done
 
     - name: Run Flyway migrations
       uses: red-gate/FlywayGitHubAction@main
       with:
-        url: jdbc:postgresql://db:5432/eight_queens_db
+        url: jdbc:postgresql://localhost:5432/eight_queens_db
         user: ${{ secrets.POSTGRES_USER }}
         password: ${{ secrets.POSTGRES_PASSWORD }}
         locations: filesystem:./migrations
