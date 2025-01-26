@@ -1,4 +1,4 @@
-name: CI for Queens
+name: Docker Compose CI
 
 on:
   pull_request:
@@ -6,49 +6,28 @@ on:
       - main
 
 jobs:
-  build-and-test:
-    runs-on: macos-latest
+  docker:
+    runs-on: ubuntu-latest
 
     steps:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-        cache: 'pip'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Install Docker and Docker Compose
-      run: |
-        brew install docker docker-compose
-        mkdir -p ~/.docker/cli-plugins
-        ln -s /opt/homebrew/lib/docker/cli-plugins/docker-compose ~/.docker/cli-plugins/docker-compose
-        echo '{"cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"]}' > ~/.docker/config.json
-        echo "Docker Compose plugin configured."
-
-    - name: Check out code
-      uses: actions/checkout@v3
-
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v1
 
-    - name: Create Docker builder
+    - name: Install Docker Compose
       run: |
-        docker buildx create --use
+        sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
 
-    - name: Build and run with Docker Compose
+    - name: Start services using docker-compose
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
     - name: Start PostgreSQL
       run: |
-        brew services start postgresql@15
+        sudo service postgresql start
         echo "Waiting for PostgreSQL to start..."
         sleep 10
       env:
@@ -63,7 +42,7 @@ jobs:
 
     - name: Install Flyway
       run: |
-        brew install flyway
+        sudo apt-get install -y flyway
 
     - name: Run migrations
       run: |
