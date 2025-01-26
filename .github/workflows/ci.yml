@@ -24,6 +24,3 @@ jobs:
     - name: Start services using docker-compose
       run: |
         docker-compose -f docker-compose.yml up --build -d
-
-    - name: Imprimir la variable PRUEBA
-      run: echo "$El valor de PRUEBA es, ${{ vars.PRUEBA }}."

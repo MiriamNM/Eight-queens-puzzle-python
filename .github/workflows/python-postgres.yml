@@ -21,7 +21,7 @@ jobs:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
     
     - name: Imprimir la variable PRUEBA
-      run: echo "${{ vars.PRUEBA }}.
+      run: echo "el usuario es ${{ secrets.POSTGRES_USER }}.
 
     - name: Set up database
       run: |
