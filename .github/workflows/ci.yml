@@ -26,4 +26,4 @@ jobs:
         docker-compose -f docker-compose.yml up --build -d
     
     - name: Imprimir la variable PRUEBA
-      run: echo "${{ vars.PRUEBA }}.
+      run: echo "${{ vars.PRUEBA }}
