@@ -35,11 +35,12 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v3
 
-    - name: Verify Docker installation
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Create Docker builder
       run: |
-        docker --version
-        docker-compose --version
-        docker info
+        docker buildx create --use
 
     - name: Build and run with Docker Compose
       run: |
