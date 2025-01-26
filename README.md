@@ -62,6 +62,7 @@ hight-queens-puzzle-python
 
 ### Commands to: create and activate python environment and install dependencies
    ```bash
+   # If you are using python 3.11
    # create python environment
    make create-venv
 
