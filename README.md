@@ -71,6 +71,9 @@ hight-queens-puzzle-python
    # disable python environment
    deactivate
 
+   # install pip
+   make pip
+
    # install dependencies
    make install
    ```
@@ -82,6 +85,9 @@ hight-queens-puzzle-python
       # Before doing make test run this command: export PYTHONPATH=$PYTHONPATH:$(pwd)/src
       make test-requirements
 
+      # Build image
+      make build
+
       # Start services with Docker Compose
       make up
 
@@ -91,20 +97,8 @@ hight-queens-puzzle-python
       # Delete volumes and images and rebuild the entire container
       make rebuild
 
-      # Check the status of services
-      make status
-
-      # Follow logs from services
-      make logs
-
-      # Access the database
-      make queens
-
-      # Run migrations
-      make migrate
-
-      # Undo the last migration
-      make undo
+      # Running tests with pytest
+      make run-tests
    ```
 10. Platforms to make http requests
    - Postman

@@ -196,3 +196,5 @@ htmlcov/
 backup.sql
 flyway.conf
 get-pip.py
+get-pip.py.1
+get-pip.py.2
