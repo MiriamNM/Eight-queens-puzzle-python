@@ -52,10 +52,15 @@ jobs:
         curl -LO https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.13/flyway-commandline-8.5.13-linux-x64.tar.gz
         # Descomprimir el archivo descargado
         tar -xzf flyway-commandline-8.5.13-linux-x64.tar.gz
-        # Mover todo el contenido de Flyway a /usr/local/bin/
+        # Mover el directorio de Flyway a /usr/local/bin/
         sudo mv flyway-*/flyway /usr/local/bin/
+        # Mover las carpetas de configuración y librerías a /usr/local/lib/flyway/
         sudo mv flyway-*/conf /usr/local/lib/flyway/
         sudo mv flyway-*/lib /usr/local/lib/flyway/
+        # Agregar Flyway al PATH
+        echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
+        # Recargar la configuración del perfil para que los cambios de PATH surtan efecto
+        source ~/.bashrc
         # Verificar que Flyway está instalado correctamente
         flyway -v
         echo "Flyway installed."
