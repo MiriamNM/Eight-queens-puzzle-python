@@ -1,4 +1,4 @@
-#!/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/queens/bin/python3
+#!/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/queens/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys

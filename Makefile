@@ -1,13 +1,15 @@
 create-venv:
 	python3.11 -m venv queens
 	@echo "Entorno virtual creado con Python 3.11."
-	@echo "Ejecuta 'source venv/bin/activate' para activarlo."
+	@echo "Ejecuta 'source queens/bin/activate' para activarlo."
 
 install: 
 	pip install -r requirements.txt
+	@echo "Ejecuta: export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src   antes de make test-requirements"
 
 #Para asegurar que todas las dependencias estan correctamente, sobretodo uvicorn y fastapi.
 test-requirements:
+	export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src
 	pip install --no-cache-dir -r requirements.txt
 	uvicorn src.app:app --host 0.0.0.0 --port 8080 --reload
 
@@ -15,6 +17,7 @@ test-requirements:
 # Construir la imagen
 build:
 	docker build -t eight-queens-puzzle .
+	@@ -23,9 +24,6 @@ up:
 
 # Levantar los servicios con Docker Compose
 up:
@@ -24,26 +27,7 @@ up:
 down:
 	docker-compose down
 
+# Detener los servicios y levantar los servicios con Docker Compose
 rebuild: 
 	docker-compose down --volumes --rmi all
 	docker-compose --env-file .env up --build
-	docker compose up -d
-
-# Ver el estado de los servicios
-status:
-	docker compose ps
-
-logs:
-	docker compose logs -f
-
-# Ver la base de datos
-queens: 
-	docker exec -it eight_queens_db psql -U mirichi -d eight_queens_db
-
-migrate:
-	@echo "Migrando esquema: public"
-	docker-compose run --rm flyway migrate -schemas=public -locations=filesystem:/flyway/sql/migrations
-
-undo:
-	@echo "Deshaciendo migración en esquema: public"
-	docker-compose run --rm flyway undo -schemas=public -locations=filesystem:/flyway/sql/migrations
