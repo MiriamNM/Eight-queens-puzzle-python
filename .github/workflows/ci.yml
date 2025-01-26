@@ -38,18 +38,24 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Start Docker service
-      run: |
-        # Verificar si Docker está en ejecución
-        if ! docker info > /dev/null 2>&1; then
-          echo "Docker no está en ejecución. Iniciando Docker..."
-          open -a Docker
-          sleep 30  # Esperar a que Docker inicie
-        fi
-
     - name: Ensure Docker is running
       run: |
+        # Verificar si Docker está en ejecución
+        if ! pgrep -x "Docker" > /dev/null; then
+          echo "Docker no está en ejecución. Iniciando Docker..."
+          open -a Docker
+          sleep 30  # Esperar 30 segundos para que Docker inicie completamente
+        else
+          echo "Docker ya está en ejecución."
+        fi
+        
+        # Verificar que Docker es accesible
         docker info || (echo "No se puede conectar a Docker. Intentando reiniciar el daemon." && sudo killall Docker && open -a Docker && sleep 30 && docker info)
+
+    - name: Verify Docker works
+      run: |
+        # Intentar ejecutar un contenedor simple para asegurarnos de que Docker funcione
+        docker run --rm hello-world
 
     - name: Start services using docker-compose
       run: |
