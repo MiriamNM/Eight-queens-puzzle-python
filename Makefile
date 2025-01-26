@@ -3,6 +3,7 @@ create-venv:
 	@echo "ejecutar el entorno virtual con 'source venv/bin/activate'"
 
 Install: 
+	export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src
 	pip install -r requirements.txt
 
 #Para asegurar que todas las dependencias estan correctamente, sobretodo uvicorn y fastapi.
