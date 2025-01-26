@@ -40,12 +40,16 @@ jobs:
         psql -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" || echo "Database already exists"
         psql -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};" || echo "Privileges already granted"
 
-    - name: Install Java
-      run: |
-        sudo apt-get install -y openjdk-11-jdk
-        java -version
-        echo "Java installed."
+    - name: Run Flyway migrations
+      uses: red-gate/FlywayGitHubAction@main
+      with:
+        url: jdbc:postgresql://db:5432/${{ secrets.POSTGRES_DB }}
+        user: ${{ secrets.POSTGRES_USER }}
+        password: ${{ secrets.POSTGRES_PASSWORD }}
+        locations: filesystem:/flyway/sql
+        extraArgs: -outOfOrder=true
 
+        
     - name: Run tests
       run: |
         pytest --maxfail=5 --disable-warnings -v
