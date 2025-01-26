@@ -79,31 +79,45 @@ hight-queens-puzzle-python
 
    ```bash
       # To ensure all dependencies are correctly installed, especially uvicorn and fastapi.
-      test-requirements
+      # Before doing make test run this command: export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src
+      make test-requirements
 
       # Start services with Docker Compose
-      up
+      make up
 
       # Stop services
-      down
+      make down
 
       # Rebuild the services and remove volumes and images
-      rebuild
+      make rebuild
 
       # Check the status of services
-      status
+      make status
 
       # Follow logs from services
-      logs
+      make logs
 
       # Access the database
-      queens
+      make queens
 
       # Run migrations
-      migrate
+      make migrate
 
       # Undo the last migration
-      undo
+      make undo
    ```
 10. Platforms to make http requests
-   - Insomnia
+   - Postman
+
+11. Queens API
+- To obtain the data [GET](http://localhost:8080/queens/)
+
+- To create data [GET](http://localhost:8080/queens/)
+```bash
+   {
+      "n": 8,
+      "context": {
+         "email": "mir@mail.com"
+      }
+   }
+ ```
