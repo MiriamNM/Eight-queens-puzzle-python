@@ -1,5 +1,5 @@
 create-venv:
-	python -m venv venv
+	python -m venv queens
 	@echo "ejecutar el entorno virtual con 'source venv/bin/activate'"
 
 Install: 
