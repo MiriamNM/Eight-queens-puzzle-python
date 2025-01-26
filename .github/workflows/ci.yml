@@ -40,6 +40,9 @@ jobs:
         psql -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" || echo "Database already exists"
         psql -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};" || echo "Privileges already granted"
 
+    - name: Imprimir la variable PRUEBA
+      run: echo "${{ vars.PRUEBA }}.
+
     - name: Test database connection
       run: |
         PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"

@@ -3,9 +3,14 @@ create-venv:
 	@echo "Entorno virtual creado con Python 3.11."
 	@echo "Ejecuta 'source queens/bin/activate' para activarlo."
 
+pip:
+	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	wget https://bootstrap.pypa.io/get-pip.py
+
+
 install: 
 	pip install -r requirements.txt
-	@echo "Ejecuta: export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src   antes de make test-requirements"
+	@echo "Ejecuta: export PYTHONPATH=$PYTHONPATH:$(pwd)/src  antes de make test-requirements"
 
 #Para asegurar que todas las dependencias estan correctamente, sobretodo uvicorn y fastapi.
 test-requirements:
@@ -27,7 +32,10 @@ up:
 down:
 	docker-compose down
 
-# Detener los servicios y levantar los servicios con Docker Compose
+# Elimina volumenes e imagenes y vuelve a construir todo el contenedor
 rebuild: 
 	docker-compose down --volumes --rmi all
 	docker-compose --env-file .env up --build
+
+run-tests:
+	pytest tests/test_app.py tests/test_eight_queens.py tests/test_eight_repository.py tests/test_entity_manager.py

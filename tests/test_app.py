@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import Mock
 from sqlalchemy.orm import Session
 from app import RequestModel, get_queens, solve
-from utils.success_messages import SUCCESS
 from utils.error_messages import ERRORS
+from utils.success_messages import SUCCESS_MESSAGE
 
 
 @pytest.fixture
@@ -14,7 +14,7 @@ def mock_db_session():
 def test_solve_valid_request(mock_db_session):
     request_data = RequestModel(n=8, context={})
     response = solve(request=request_data, db_session=mock_db_session)
-    assert response["result"] == SUCCESS.queens_are_kept
+    assert response["result"] == SUCCESS_MESSAGE.queens_are_kept
     assert response["error"] == ""
 
 

@@ -79,7 +79,7 @@ hight-queens-puzzle-python
 
    ```bash
       # To ensure all dependencies are correctly installed, especially uvicorn and fastapi.
-      # Before doing make test run this command: export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src
+      # Before doing make test run this command: export PYTHONPATH=$PYTHONPATH:$(pwd)/src
       make test-requirements
 
       # Start services with Docker Compose
@@ -88,7 +88,7 @@ hight-queens-puzzle-python
       # Stop services
       make down
 
-      # Rebuild the services and remove volumes and images
+      # Delete volumes and images and rebuild the entire container
       make rebuild
 
       # Check the status of services
@@ -112,7 +112,7 @@ hight-queens-puzzle-python
 11. Queens API
 - To obtain the data [GET](http://localhost:8080/queens/)
 
-- To create data [GET](http://localhost:8080/queens/)
+- To create data [POST: http://localhost:8080/queens/](http://localhost:8080/queens/)
 ```bash
    {
       "n": 8,
@@ -121,3 +121,22 @@ hight-queens-puzzle-python
       }
    }
  ```
+
+ 12. Instructions for Configuring `pre-commit`
+This project uses [pre-commit](https://pre-commit.com/) to automate the execution of Git hooks before making a commit. This ensures that quality tasks, such as code formatting, are performed before any changes are confirmed.
+### Steps Description
+1. **Install dependencies**: `pre-commit` is installed automatically along with other libraries when you run:
+   ```bash
+   pip install -r requirements.txt
+2. Prepare changes: Add the modified files to the staging area using
+   ```bash
+      git add . 
+      git add 'file'
+3. Make the commit: Use the command to create a standardized commit message with Commitizen
+   ```bash
+      cz c 
+      cz commit
+4. Push the code: Send your changes to the remote repository using
+   ```bash
+      git push origin "branch"
+- By following these steps, you ensure that commit messages follow a standard format and that the code passes quality checks before being pushed.
