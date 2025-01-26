@@ -49,13 +49,8 @@ jobs:
           echo "Docker ya está en ejecución."
         fi
         
-        # Verificar que Docker es accesible
+        # Verificar si docker está accesible
         docker info || (echo "No se puede conectar a Docker. Intentando reiniciar el daemon." && sudo killall Docker && open -a Docker && sleep 30 && docker info)
-
-    - name: Verify Docker works
-      run: |
-        # Intentar ejecutar un contenedor simple para asegurarnos de que Docker funcione
-        docker run --rm hello-world
 
     - name: Start services using docker-compose
       run: |
