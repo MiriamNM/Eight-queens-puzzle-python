@@ -42,17 +42,14 @@ jobs:
 
     - name: Test database connection
       run: |
-        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"
-      env:
-        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      
+        PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"
+
     - name: Wait for PostgreSQL
       run: |
         until pg_isready -h localhost -p 5432; do
           echo "Waiting for PostgreSQL to be ready..."
           sleep 5
         done
-        
 
     - name: Run Flyway migrations
       uses: red-gate/FlywayGitHubAction@main
