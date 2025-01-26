@@ -43,7 +43,7 @@ jobs:
     - name: Run Flyway migrations
       uses: red-gate/FlywayGitHubAction@main
       with:
-        url: jdbc:postgresql://db:5432/${{ secrets.POSTGRES_DB }}
+        url: jdbc:postgresql://db:5432/eight_queens_db
         user: ${{ secrets.POSTGRES_USER }}
         password: ${{ secrets.POSTGRES_PASSWORD }}
         locations: filesystem:./migrations
