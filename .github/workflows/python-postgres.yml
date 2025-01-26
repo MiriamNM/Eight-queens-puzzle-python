@@ -17,17 +17,13 @@ jobs:
         sleep 10
       env:
         POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         POSTGRES_DB: ${{ vars.POSTGRES_DB }}
 
     - name: Set up database
       run: |
         psql -U ${{ vars.POSTGRES_USER }} -c "CREATE DATABASE ${{ vars.POSTGRES_DB }};" || echo "Database already exists"
         psql -U ${{ vars.POSTGRES_USER }} -d ${{ vars.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ vars.POSTGRES_DB }} TO ${{ vars.POSTGRES_USER }};" || echo "Privileges already granted"
-
-    - name: Test database connection
-      run: |
-        PGPASSWORD=${{ vars.POSTGRES_PASSWORD }} psql -h localhost -U ${{ vars.POSTGRES_USER }} -d ${{ vars.POSTGRES_DB }} -c "\dt"
 
     - name: Wait for PostgreSQL
       run: |
@@ -41,7 +37,7 @@ jobs:
       with:
         url: jdbc:postgresql://localhost:5432/eight_queens_db
         user: ${{ vars.POSTGRES_USER }}
-        password: ${{ vars.POSTGRES_PASSWORD }}
+        password: ${{ secrets.POSTGRES_PASSWORD }}
         locations: filesystem:./migrations
         extraArgs: -outOfOrder=true
         
