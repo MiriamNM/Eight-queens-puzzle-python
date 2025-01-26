@@ -16,18 +16,18 @@ jobs:
         echo "Waiting for PostgreSQL to start..."
         sleep 10
       env:
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_USER: ${{ vars.POSTGRES_USER }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        POSTGRES_DB: ${{ vars.POSTGRES_DB }}
 
     - name: Set up database
       run: |
-        psql -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" || echo "Database already exists"
-        psql -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};" || echo "Privileges already granted"
+        psql -U ${{ vars.POSTGRES_USER }} -c "CREATE DATABASE ${{ vars.POSTGRES_DB }};" || echo "Database already exists"
+        psql -U ${{ vars.POSTGRES_USER }} -d ${{ vars.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ vars.POSTGRES_DB }} TO ${{ vars.POSTGRES_USER }};" || echo "Privileges already granted"
 
     - name: Test database connection
       run: |
-        PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"
+        PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h localhost -U ${{ vars.POSTGRES_USER }} -d ${{ vars.POSTGRES_DB }} -c "\dt"
 
     - name: Wait for PostgreSQL
       run: |
@@ -40,7 +40,7 @@ jobs:
       uses: red-gate/FlywayGitHubAction@main
       with:
         url: jdbc:postgresql://localhost:5432/eight_queens_db
-        user: ${{ secrets.POSTGRES_USER }}
+        user: ${{ vars.POSTGRES_USER }}
         password: ${{ secrets.POSTGRES_PASSWORD }}
         locations: filesystem:./migrations
         extraArgs: -outOfOrder=true
