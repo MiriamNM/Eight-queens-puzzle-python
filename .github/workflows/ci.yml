@@ -40,6 +40,12 @@ jobs:
         psql -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};" || echo "Database already exists"
         psql -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};" || echo "Privileges already granted"
 
+    - name: Test database connection
+      run: |
+        psql -h db -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "\dt"
+      env:
+        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
     - name: Run Flyway migrations
       uses: red-gate/FlywayGitHubAction@main
       with:
