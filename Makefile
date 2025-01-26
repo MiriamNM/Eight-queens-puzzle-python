@@ -37,5 +37,6 @@ rebuild:
 	docker-compose down --volumes --rmi all
 	docker-compose --env-file .env up --build
 
+# Correr test con pytest
 run-tests:
 	pytest tests/test_app.py tests/test_eight_queens.py tests/test_eight_repository.py tests/test_entity_manager.py
