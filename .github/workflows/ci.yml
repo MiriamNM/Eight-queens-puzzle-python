@@ -42,7 +42,11 @@ jobs:
 
     - name: Install Flyway
       run: |
-        sudo apt-get install -y flyway
+        curl -s https://api.flywaydb.org/flyway-commandline-8.5.13-linux-x64.tar.gz -o flyway.tar.gz
+        tar -xzf flyway.tar.gz
+        sudo mv flyway-*/flyway /usr/local/bin/
+        flyway -v
+        echo "Flyway installed."
 
     - name: Run migrations
       run: |
