@@ -4,11 +4,12 @@ create-venv:
 	@echo "Ejecuta 'source queens/bin/activate' para activarlo."
 
 install: 
-	export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src
 	pip install -r requirements.txt
+	@echo "Ejecuta: export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src   antes de make test-requirements"
 
 #Para asegurar que todas las dependencias estan correctamente, sobretodo uvicorn y fastapi.
 test-requirements:
+	export PYTHONPATH=$PYTHONPATH:/Users/mirichi/Documents/dev/Eight-queens-puzzle-python/src
 	pip install --no-cache-dir -r requirements.txt
 	uvicorn src.app:app --host 0.0.0.0 --port 8080 --reload
 
