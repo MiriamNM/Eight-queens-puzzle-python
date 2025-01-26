@@ -46,12 +46,9 @@ jobs:
         java -version
         echo "Java installed."
 
-    - name: Install Flyway
+    - name: Install Flyway via APT (alternative method)
       run: |
-        curl -LO https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.13/flyway-commandline-8.5.13-linux-x64.tar.gz
-        if [ $? -ne 0 ]; then echo "Error downloading Flyway"; exit 1; fi
-        tar -xzf flyway-commandline-8.5.13-linux-x64.tar.gz
-        sudo mv flyway-*/flyway /usr/local/bin/
+        sudo apt-get install -y flyway
         flyway -v
         echo "Flyway installed."
 
