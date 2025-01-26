@@ -46,15 +46,6 @@ jobs:
         java -version
         echo "Java installed."
 
-    - name: Run Flyway migrations
-      uses: red-gate/FlywayGitHubAction@main
-      with:
-        url: jdbc:postgresql://postgres:5432/${{ secrets.POSTGRES_DB }}
-        user: ${{ secrets.POSTGRES_USER }}
-        password: ${{ secrets.POSTGRES_PASSWORD }}
-        locations: filesystem:./sql
-        extraArgs: -outOfOrder=true
-        
     - name: Run tests
       run: |
         pytest --maxfail=5 --disable-warnings -v
