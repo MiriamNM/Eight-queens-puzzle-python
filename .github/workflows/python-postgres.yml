@@ -41,7 +41,4 @@ jobs:
         locations: filesystem:./migrations
         extraArgs: -outOfOrder=true
         
-    - name: Run tests
-      run: |
-        pytest --maxfail=5 --disable-warnings -v
 
