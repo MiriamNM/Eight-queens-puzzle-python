@@ -35,24 +35,13 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Ensure Docker is running
+    - name: Verify Docker installation
       run: |
-        # Verificar si Docker está en ejecución
-        if ! pgrep -x "Docker" > /dev/null; then
-          echo "Docker no está en ejecución. Iniciando Docker..."
-          open -a Docker
-          sleep 30  # Esperar 30 segundos para que Docker inicie completamente
-        else
-          echo "Docker ya está en ejecución."
-        fi
-        
-        # Verificar si docker está accesible
-        docker info || (echo "No se puede conectar a Docker. Intentando reiniciar el daemon." && sudo killall Docker && open -a Docker && sleep 30 && docker info)
+        docker --version
+        docker-compose --version
+        docker info
 
-    - name: Start services using docker-compose
+    - name: Build and run with Docker Compose
       run: |
         docker-compose -f docker-compose.yml up --build -d
 
