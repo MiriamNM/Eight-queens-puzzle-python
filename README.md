@@ -10,6 +10,7 @@
 - Store the solutions in postgres
 
 ## Next steps
+- Implement actions for the connection of postgres and flyway
 - Return answers to solutions with pagination
 
 ## Requirements
